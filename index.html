@@ -1,0 +1,666 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Calisthenics Weight Loss Plan</title>
+  <!-- Enable standalone mode on iOS when added to home screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Calisthenics">
+  <meta name="theme-color" content="#131517">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+  <header>
+    <div class="top-bar">
+      <div>
+        <h1>FitPulse</h1>
+        <p class="brand-subtitle">Calisthenics</p>
+      </div>
+      <button class="icon-button" type="button" data-page-target="cover" aria-label="Home">&#8962;</button>
+    </div>
+  </header>
+  <main>
+    <section id="coverPage" class="app-page active" data-page="cover">
+      <section class="cover-page" aria-label="Cover">
+        <div class="page-brand"><svg class="brand-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 1.7 4.8 13.1h5.5L8.9 22.3l10.3-12.6h-5.8z"/></svg><span class="brand-text">AeroPulse</span></div>
+        <img id="coverImage" class="cover-image" alt="Cover image" src="images/9e231f3ade7a41a7d02b0c10b93a62b3.jpg">
+        <div class="cover-top">
+          <div id="coverMenu" class="cover-menu">
+            <button id="coverMenuBtn" class="icon-button" type="button" aria-label="Cover menu" aria-haspopup="true" aria-expanded="false">&#8942;</button>
+            <div id="coverMenuDropdown" class="cover-menu-dropdown" role="menu" aria-label="Cover actions">
+              <button id="coverMenuEditProfile" class="cover-menu-item" type="button" role="menuitem">Edit Profile</button>
+              <button id="coverMenuChangeCover" class="cover-menu-item" type="button" role="menuitem">Edit Cover</button>
+              <button id="coverMenuAppearance" class="cover-menu-item" type="button" role="menuitem">Appearance</button>
+            </div>
+          </div>
+        </div>
+        <div class="cover-card">
+          <div class="cover-card-top">
+            <span class="cover-see-profile">Profile</span>
+            <button id="coverQuoteBtn" class="cover-chip cover-profile-tip" type="button" aria-label="Profile motivation" aria-expanded="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"></path>
+              </svg>
+            </button>
+          </div>
+          <div id="coverQuotePop" class="cover-quote-pop" role="status" aria-live="polite">
+            <p class="cover-quote-text">â€œSmall effort, every day. Big change, every month.â€</p>
+            <span class="cover-quote-author">AeroPulse motivation</span>
+          </div>
+          <h2 id="profileName" class="profile-name">FitPulse<br>Member</h2>
+          <p id="profileHandleMeta" class="profile-meta">@fitpulse_user</p>
+          <p id="profileBio" class="profile-bio">Bodyweight training, smart BMI guidance, and weekly calisthenics sessions built for consistency.</p>
+          <div class="profile-stats">
+            <div><strong id="profileBmiStat">--</strong><span>BMI</span></div>
+            <div><strong id="profilePlanStat">0</strong><span>Days</span></div>
+            <div><strong id="profileMovesStat">0</strong><span>Moves</span></div>
+          </div>
+          <div class="profile-tags">
+            <span id="coverGoalBadge">@goal-smart</span>
+            <span id="profileHandleTop">@fitpulse_user</span>
+            <span id="profileCategoryTag">@smart-plan</span>
+          </div>
+        </div>
+      </section>
+      <input id="coverImageInput" type="file" accept="image/*" style="display:none;">
+    </section>
+
+    <section id="bmiPage" class="app-page" data-page="bmi">
+      <section class="reference-dashboard" aria-label="BMI and plan">
+        <div class="page-brand"><svg class="brand-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 1.7 4.8 13.1h5.5L8.9 22.3l10.3-12.6h-5.8z"/></svg><span class="brand-text">AeroPulse</span></div>
+        <div class="ref-bg-photo"></div>
+        <div class="ref-top">
+          <div class="ref-greeting">
+            <p id="greetingPrimary">Hi Athlete,</p>
+            <span id="greetingSecondary">Welcome!</span>
+          </div>
+          <button class="icon-button" type="button" data-page-target="cover" aria-label="Home">&#8962;</button>
+        </div>
+
+        <section id="profile" class="ref-glass ref-health">
+          <h2>BMI Calculator</h2>
+          <p class="section-eyebrow">Weekly Stats</p>
+          <div id="setupProgress" class="setup-progress" aria-live="polite">
+            <div class="setup-progress-track">
+              <div id="setupProgressFill" class="setup-progress-fill"></div>
+            </div>
+            <p id="setupProgressText" class="setup-progress-text">Step 1 of 10</p>
+          </div>
+          <div class="ref-input-grid">
+            <div class="input-group">
+              <label for="heightInput">Height (cm)</label>
+              <input type="number" id="heightInput" placeholder="Height" min="0" value="177">
+            </div>
+            <div class="input-group">
+              <label for="weightInput">Weight (kg)</label>
+              <input type="number" id="weightInput" placeholder="Weight" min="0" value="78">
+            </div>
+            <div class="input-group">
+              <label for="ageInput">Age</label>
+              <input type="number" id="ageInput" placeholder="Age" min="10" max="90" value="28">
+            </div>
+            <div class="input-group">
+              <label for="bodyTypeInput">Body type</label>
+              <select id="bodyTypeInput" aria-label="Body type">
+                <option value="mesomorph">Mesomorph</option>
+                <option value="ectomorph">Ectomorph</option>
+                <option value="endomorph">Endomorph</option>
+              </select>
+              <div id="bodyTypeMenu" class="gender-menu" aria-label="Body type submenu">
+                <button id="bodyTypeMenuTrigger" class="gender-menu-trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+                  <span id="bodyTypeMenuValue">Mesomorph</span>
+                  <span class="gender-menu-caret" aria-hidden="true">&#9662;</span>
+                </button>
+                <div id="bodyTypeMenuDropdown" class="gender-menu-dropdown" role="menu" aria-label="Select body type">
+                  <button class="gender-option bodytype-option" type="button" data-bodytype-option="ectomorph" role="menuitemradio" aria-checked="false">
+                    <img id="bodyTypeOptionEctomorphPhoto" class="gender-option-photo" src="images/image-2.png" alt="Ectomorph body type graphic" loading="lazy">
+                    <span class="bodytype-option-copy"><strong>Ectomorph</strong><em>Lean frame</em></span>
+                  </button>
+                  <button class="gender-option bodytype-option" type="button" data-bodytype-option="mesomorph" role="menuitemradio" aria-checked="true">
+                    <img id="bodyTypeOptionMesomorphPhoto" class="gender-option-photo" src="images/image-2.png" alt="Mesomorph body type graphic" loading="lazy">
+                    <span class="bodytype-option-copy"><strong>Mesomorph</strong><em>Athletic build</em></span>
+                  </button>
+                  <button class="gender-option bodytype-option" type="button" data-bodytype-option="endomorph" role="menuitemradio" aria-checked="false">
+                    <img id="bodyTypeOptionEndomorphPhoto" class="gender-option-photo" src="images/image-2.png" alt="Endomorph body type graphic" loading="lazy">
+                    <span class="bodytype-option-copy"><strong>Endomorph</strong><em>Higher energy storage</em></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="input-group" style="grid-column: 1 / -1;">
+              <label for="genderInput">Gender</label>
+              <select id="genderInput" aria-label="Gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+              <div id="genderMenu" class="gender-menu" aria-label="Gender submenu">
+                <button id="genderMenuTrigger" class="gender-menu-trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+                  <span id="genderMenuValue">Male</span>
+                  <span class="gender-menu-caret" aria-hidden="true">&#9662;</span>
+                </button>
+                <div id="genderMenuDropdown" class="gender-menu-dropdown" role="menu" aria-label="Select gender">
+                  <button class="gender-option" type="button" data-gender-option="male" role="menuitemradio" aria-checked="true">
+                    <img id="genderOptionMalePhoto" class="gender-option-photo" src="images/image-2.png" alt="Male body graphic" loading="lazy">
+                    <span>Male</span>
+                  </button>
+                  <button class="gender-option" type="button" data-gender-option="female" role="menuitemradio" aria-checked="false">
+                    <img id="genderOptionFemalePhoto" class="gender-option-photo" src="images/image-2.png" alt="Female body graphic" loading="lazy">
+                    <span>Female</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="input-group bodytype-panel" style="grid-column: 1 / -1;">
+              <p class="bodytype-title">Body type guide</p>
+              <div id="bodyTypeGraphic" class="bodytype-visual" role="group" aria-label="Body type visual guide">
+                <button class="bodytype-chip" type="button" data-body-type="ectomorph">
+                  <img class="bodytype-photo" src="images/image-2.png" alt="Ectomorph body type reference photo" loading="lazy">
+                  <strong>Ectomorph</strong>
+                  <em>Lean frame</em>
+                </button>
+                <button class="bodytype-chip" type="button" data-body-type="mesomorph">
+                  <img class="bodytype-photo" src="images/image-2.png" alt="Mesomorph body type reference photo" loading="lazy">
+                  <strong>Mesomorph</strong>
+                  <em>Athletic build</em>
+                </button>
+                <button class="bodytype-chip" type="button" data-body-type="endomorph">
+                  <img class="bodytype-photo" src="images/image-2.png" alt="Endomorph body type reference photo" loading="lazy">
+                  <strong>Endomorph</strong>
+                  <em>Higher energy storage</em>
+                </button>
+              </div>
+              <div id="bodyTypeDetail" class="bodytype-detail" aria-live="polite">
+                <div id="bodyTypePreview" class="bodytype-preview"></div>
+                <p id="bodyTypeDescription" class="bodytype-description"></p>
+              </div>
+            </div>
+            <div class="input-group" style="grid-column: 1 / -1;">
+              <label for="goalWeeksInput">Goal duration (weeks)</label>
+              <input type="number" id="goalWeeksInput" placeholder="Weeks to target" min="1" max="24" value="6">
+              <p id="goalWeeksHint" class="goal-duration-note"></p>
+            </div>
+            <div class="input-group">
+              <label for="fitnessGoalInput">Fitness goal</label>
+              <select id="fitnessGoalInput" aria-label="Fitness goal">
+                <option value="auto">Auto (from BMI)</option>
+                <option value="weight-loss">Weight loss</option>
+                <option value="muscle-gain">Muscle gain</option>
+                <option value="general-fitness">General fitness</option>
+                <option value="maintenance">Maintenance</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="activityLevelInput">Activity level</label>
+              <select id="activityLevelInput" aria-label="Activity level">
+                <option value="moderate">Moderate</option>
+                <option value="low">Low</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="dietaryPreferenceInput">Dietary preference</label>
+              <select id="dietaryPreferenceInput" aria-label="Dietary preference">
+                <option value="balanced">Balanced</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="high-protein">High-protein</option>
+                <option value="low-carb">Low-carb</option>
+                <option value="dairy-free">Dairy-free</option>
+                <option value="gluten-free">Gluten-free</option>
+              </select>
+            </div>
+            <div class="input-group" style="grid-column: 1 / -1;">
+              <label for="allergiesInput">Allergies or exclusions</label>
+              <input type="text" id="allergiesInput" placeholder="e.g. nuts, shellfish, dairy">
+            </div>
+            <div class="input-group">
+              <label for="experienceInput">Fitness experience</label>
+              <select id="experienceInput" aria-label="Fitness experience">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="limitationsInput">Health limitations</label>
+              <input type="text" id="limitationsInput" placeholder="e.g. knee sensitivity">
+            </div>
+          </div>
+          <button id="calculateBtn" type="button">Generate Plan</button>
+          <div id="bmiBarContainer">
+            <div id="bmiBar">
+              <div id="bmiPointer"></div>
+            </div>
+            <div class="bmi-labels">
+              <span>Under</span>
+              <span>Normal</span>
+              <span>Over</span>
+              <span>Obese</span>
+            </div>
+          </div>
+          <p id="bmiResult" class="bmi-output">BMI: -- (Pending)</p>
+          <div id="riskMessage" class="risk-message" style="display: none;"></div>
+        </section>
+
+        <section id="plan" class="ref-glass ref-task" style="display: none;">
+          <div class="ref-task-head">
+            <h2>Active Task</h2>
+            <span id="heroTrackingType" class="ref-task-type">Live tracking</span>
+          </div>
+          <div class="ref-kpi-grid">
+            <div class="ref-kpi">
+              <span>Streak</span>
+              <strong id="heroPlanValue">3 days</strong>
+            </div>
+            <div class="ref-kpi">
+              <span>Progress</span>
+              <strong id="heroBmiValue">Ready</strong>
+              <em id="heroBmiNote">Enter stats</em>
+            </div>
+            <div class="ref-kpi">
+              <span>Mode</span>
+              <strong id="heroModeValue">Smart</strong>
+            </div>
+          </div>
+          <div class="hardware-track-row">
+            <button id="enableMotionBtn" class="hardware-track-btn" type="button">Enable iPhone Motion Tracking</button>
+            <p id="motionStatusText" class="hardware-track-status">Motion sensor: off</p>
+            <p id="motionCountText" class="hardware-track-count">0 live activity pulses</p>
+          </div>
+          <div id="planPager" class="plan-pager" style="display: none;">
+            <span id="planPagerMeta" class="plan-pager-meta">Week 1</span>
+            <div class="plan-pager-buttons">
+              <button id="planPrevBtn" class="plan-pager-btn" type="button" aria-label="Previous week">&#9664;</button>
+              <button id="planNextBtn" class="plan-pager-btn" type="button" aria-label="Next week">&#9654;</button>
+            </div>
+          </div>
+          <div id="planList"></div>
+          <div class="plan-nutrition-cta-wrap">
+            <button id="viewNutritionBtn" class="hardware-track-btn" type="button">View Nutrition Plan</button>
+          </div>
+        </section>
+
+        <section id="tagline" class="ref-glass ref-footer" style="display: none;">
+          <p id="taglineText">Your workout plan is ready. Tap Active Task to open details.</p>
+        </section>
+
+      </section>
+    </section>
+
+    <section id="planPage" class="app-page" data-page="plan">
+      <section class="reference-dashboard plan-dashboard" aria-label="Workout plan">
+        <div class="page-brand"><svg class="brand-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 1.7 4.8 13.1h5.5L8.9 22.3l10.3-12.6h-5.8z"/></svg><span class="brand-text">AeroPulse</span></div>
+        <div class="ref-bg-photo"></div>
+        <div class="ref-top">
+          <div class="ref-greeting">
+            <p>Workout Plan</p>
+            <span>Adaptive routine</span>
+          </div>
+          <button class="icon-button" type="button" data-page-target="bmi" aria-label="Back to BMI">&lt;</button>
+        </div>
+        <div id="planPageSlot"></div>
+      </section>
+    </section>
+
+    <section id="trackingPage" class="app-page" data-page="tracking">
+      <section class="tracking-page" aria-label="Muscle tracking">
+        <div class="page-brand"><svg class="brand-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 1.7 4.8 13.1h5.5L8.9 22.3l10.3-12.6h-5.8z"/></svg><span class="brand-text">AeroPulse</span></div>
+        <div class="tracking-header">
+          <h2 id="mqTitle">Muscle <span class="mq-highlight">Quality</span></h2>
+          <p id="activityLastWorkout" class="tracking-subline">No workout completed yet.</p>
+        </div>
+        <div class="tracking-hero-grid">
+          <div class="tracking-hero-card">
+            <span class="tracking-hero-label">Streak</span>
+            <strong id="heroTrackStreak">0 days</strong>
+            <p>Daily activity chain</p>
+          </div>
+          <div class="tracking-hero-card tracking-hero-card-accent">
+            <span class="tracking-hero-label">Burn</span>
+            <strong id="heroTrackCalories">0 kcal</strong>
+            <p>Estimated calories</p>
+          </div>
+        </div>
+        <div class="tracking-insights">
+          <h3 id="trackingSummaryTitle">Session summary</h3>
+          <p id="trackingSummaryText">Complete sessions to unlock adaptive insights.</p>
+        </div>
+        <section id="exerciseProgressPanel" class="tracking-exercises submenu-trigger" aria-label="Exercise progress" role="button" tabindex="0" aria-expanded="false" aria-controls="mqPanel">
+          <div class="tracking-section-head">
+            <h3>Exercise Progress</h3>
+            <span id="exerciseProgressToggleLabel">Adaptive â–¾</span>
+          </div>
+          <article id="exerciseCardA" class="exercise-progress-card warm">
+            <div>
+              <strong id="exerciseTitleA">Squats</strong>
+              <p id="exerciseMetaA">Leg drive and endurance</p>
+              <div class="exercise-progress-track" aria-hidden="true"><span class="exercise-progress-fill"></span></div>
+            </div>
+            <span id="exercisePctA">0%</span>
+          </article>
+          <article id="exerciseCardB" class="exercise-progress-card cool">
+            <div>
+              <strong id="exerciseTitleB">Jogging</strong>
+              <p id="exerciseMetaB">Cardio pacing</p>
+              <div class="exercise-progress-track" aria-hidden="true"><span class="exercise-progress-fill"></span></div>
+            </div>
+            <span id="exercisePctB">0%</span>
+          </article>
+          <article id="exerciseCardC" class="exercise-progress-card frost">
+            <div>
+              <strong id="exerciseTitleC">Plank</strong>
+              <p id="exerciseMetaC">Core stability</p>
+              <div class="exercise-progress-track" aria-hidden="true"><span class="exercise-progress-fill"></span></div>
+            </div>
+            <span id="exercisePctC">0%</span>
+          </article>
+        </section>
+        <div id="mqPanel" class="mq-panel collapsed">
+          <div class="mq-compact-glass">
+            <div class="mq-body mq-body-compact">
+              <img id="mqBodyImage" src="https://commons.wikimedia.org/wiki/Special:FilePath/Silhouette%20femme%20homme%20anterieur%20posterieur.svg" alt="Body tracking graphic">
+            </div>
+            <div class="mq-scale mq-scale-compact">
+              <div class="mq-scale-bar"><span id="mqScaleMarker" class="mq-scale-marker" aria-hidden="true"></span></div>
+            <div class="mq-scale-labels">
+              <span data-level="sculpted">Sculpted</span>
+              <span data-level="athletic">Athletic</span>
+              <span data-level="fit">Fit</span>
+              <span data-level="average">Average</span>
+              <span data-level="needs-work">Needs Work</span>
+            </div>
+            <div class="mq-scale-readout">
+              <span id="mqScaleScore" class="mq-scale-score">132 MQ</span>
+              <span id="mqSideBalance" class="mq-scale-balance">L/R balance --</span>
+            </div>
+            <div id="mqScaleStatus" class="mq-scale-status">Current level: Needs Work â€¢ 0 MQ avg</div>
+          </div>
+        </div>
+        </div>
+        <div class="mq-data-hidden" aria-hidden="true">
+          <span id="mqShoulderL">132</span>
+          <span id="mqChestL">138</span>
+          <span id="mqBicepsL">139</span>
+          <span id="mqAbsL">142</span>
+          <span id="mqForearmL">133</span>
+          <span id="mqQuadL">147</span>
+          <span id="mqShoulderR">136</span>
+          <span id="mqChestR">139</span>
+          <span id="mqBicepsR">139</span>
+          <span id="mqAbsR">143</span>
+          <span id="mqForearmR">128</span>
+          <span id="mqQuadR">141</span>
+        </div>
+        <div class="tracking-summary">
+          <p>Progress<strong id="activityPercent">0%</strong></p>
+          <p>Moves<strong id="activityCompletedMoves">0</strong><span id="activityTotalMoves" style="display:none;">0</span></p>
+          <p>Sessions<strong id="activityCompletedDays">0</strong><span id="activityTotalDays" style="display:none;">0</span></p>
+        </div>
+        <div class="tracking-rings">
+          <div class="ring-card">
+            <div id="progressRing" class="ring-meter" style="--percent:0; --ring-color: rgba(var(--ui-vibrant-a-rgb), 0.95);"><span id="progressRingValue">0%</span></div>
+            <p>Plan progress</p>
+          </div>
+          <div class="ring-card">
+            <div id="calorieRing" class="ring-meter" style="--percent:0; --ring-color: rgba(var(--ui-vibrant-b-rgb), 0.95);"><span id="calorieRingValue">0</span></div>
+            <p>Calories burnt</p>
+          </div>
+          <div class="ring-card">
+            <div id="weightRing" class="ring-meter" style="--percent:0; --ring-color: rgba(var(--ui-vibrant-c-rgb), 0.95);"><span id="weightRingValue">0kg</span></div>
+            <p>Approx. fat loss</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section id="nutritionPage" class="app-page" data-page="nutrition">
+      <section class="nutrition-page" aria-label="Nutrition plan">
+        <div class="page-brand"><svg class="brand-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 1.7 4.8 13.1h5.5L8.9 22.3l10.3-12.6h-5.8z"/></svg><span class="brand-text">AeroPulse</span></div>
+        <div class="nutrition-head">
+          <div>
+            <h2>Nutrition Plan</h2>
+            <p>Personalized from your profile and workout data</p>
+          </div>
+          <button id="nutritionBackBtn" class="icon-button" type="button" aria-label="Back to workout" data-page-target="bmi">&lt;</button>
+        </div>
+
+        <div class="nutrition-glass">
+          <div class="nutrition-summary-grid">
+            <div class="nutrition-stat"><span>Goal</span><strong id="nutritionGoalValue">General fitness</strong></div>
+            <div class="nutrition-stat"><span>Calorie target</span><strong id="nutritionTargetCalories">-- kcal</strong></div>
+            <div class="nutrition-stat"><span>Plan calories</span><strong id="nutritionPlanCalories">-- kcal</strong></div>
+            <div class="nutrition-stat"><span>Daily macros</span><strong id="nutritionMacroTotals">P -- / C -- / F --</strong></div>
+          </div>
+          <p class="nutrition-note">For educational planning only, not medical advice. If you have medical conditions or specialized dietary needs, consult a qualified nutrition professional.</p>
+        </div>
+
+        <div class="nutrition-controls">
+          <button id="regenNutritionBtn" class="nutrition-cta" type="button">Regenerate Meal Plan</button>
+          <button id="saveNutritionBtn" class="nutrition-cta secondary" type="button">Save Full Plan</button>
+        </div>
+
+        <div id="nutritionFilterChips" class="nutrition-filters" aria-label="Nutrition filters">
+          <button class="nutrition-filter-chip" type="button" data-filter="vegetarian">Vegetarian</button>
+          <button class="nutrition-filter-chip" type="button" data-filter="vegan">Vegan</button>
+          <button class="nutrition-filter-chip" type="button" data-filter="high-protein">High-protein</button>
+          <button class="nutrition-filter-chip" type="button" data-filter="low-carb">Low-carb</button>
+          <button class="nutrition-filter-chip" type="button" data-filter="dairy-free">Dairy-free</button>
+          <button class="nutrition-filter-chip" type="button" data-filter="gluten-free">Gluten-free</button>
+        </div>
+        <div class="nutrition-country-row">
+          <div class="nutrition-country-copy">
+            <span>Country or Food Culture Preference</span>
+            <strong id="nutritionCountryLabel">International / Mixed Meals</strong>
+          </div>
+          <button id="nutritionCountryBtn" class="nutrition-country-btn" type="button" aria-label="Choose country or food culture preference">Choose</button>
+        </div>
+
+        <div id="nutritionTabs" class="nutrition-tabs" role="tablist" aria-label="Nutrition sections">
+          <button class="nutrition-tab-pill active" type="button" role="tab" aria-selected="true" data-nutrition-tab="overview">Overview</button>
+          <button class="nutrition-tab-pill" type="button" role="tab" aria-selected="false" data-nutrition-tab="meals">Daily Meals</button>
+          <button class="nutrition-tab-pill" type="button" role="tab" aria-selected="false" data-nutrition-tab="macros">Macros & Calories</button>
+          <button class="nutrition-tab-pill" type="button" role="tab" aria-selected="false" data-nutrition-tab="ingredients">Ingredients</button>
+          <button class="nutrition-tab-pill" type="button" role="tab" aria-selected="false" data-nutrition-tab="saved">Saved Plans</button>
+        </div>
+
+        <div class="nutrition-tab-content">
+          <section id="nutritionOverviewPanel" class="nutrition-tab-panel active" data-nutrition-panel="overview" role="tabpanel">
+            <article class="nutrition-overview-block">
+              <h4>Adaptive strategy</h4>
+              <p id="nutritionOverviewText">Your plan will adapt from BMI, body type, activity level, and your selected preferences.</p>
+            </article>
+            <article class="nutrition-overview-block">
+              <h4>Daily structure</h4>
+              <ul id="nutritionOverviewBullets">
+                <li>Balanced meals matched to your fitness goal.</li>
+                <li>Portion sizing aligned with your calorie target.</li>
+                <li>Filters and restrictions are applied automatically.</li>
+              </ul>
+            </article>
+            <article class="nutrition-overview-block">
+              <h4>Final action</h4>
+              <p>Lock this setup into your weekly routine when ready.</p>
+              <div style="margin-top:0.42rem;">
+                <button id="finishNutritionBtn" class="nutrition-cta ghost" type="button">Finish & Save Plan</button>
+              </div>
+            </article>
+          </section>
+
+          <section id="nutritionMealsPanel" class="nutrition-tab-panel" data-nutrition-panel="meals" role="tabpanel">
+            <div id="nutritionMealsList"></div>
+          </section>
+
+          <section id="nutritionMacrosPanel" class="nutrition-tab-panel" data-nutrition-panel="macros" role="tabpanel">
+            <article class="nutrition-overview-block">
+              <h4>Calories</h4>
+              <div class="macro-progress-row">
+                <div class="macro-progress-head"><span>Target</span><strong id="macroTargetCalorie">-- kcal</strong></div>
+                <div class="macro-progress-head"><span>Planned</span><strong id="macroPlannedCalorie">-- kcal</strong></div>
+              </div>
+            </article>
+            <article class="nutrition-overview-block">
+              <h4>Macronutrient split</h4>
+              <div id="macroProgressRows"></div>
+            </article>
+          </section>
+
+          <section id="nutritionIngredientsPanel" class="nutrition-tab-panel" data-nutrition-panel="ingredients" role="tabpanel">
+            <div id="nutritionIngredientsList"></div>
+          </section>
+
+          <section id="nutritionSavedPanel" class="nutrition-tab-panel" data-nutrition-panel="saved" role="tabpanel">
+            <div id="nutritionSavedList"></div>
+          </section>
+        </div>
+      </section>
+    </section>
+  </main>
+  <nav class="bottom-nav" aria-label="Primary">
+    <button class="nav-item active" type="button" data-page-target="cover" aria-label="Cover">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 8c0-2.2 1.8-4 4-4s4 1.8 4 4v2h1.8a2.2 2.2 0 0 1 2.2 2.2v5.6A2.2 2.2 0 0 1 17.8 20H6.2A2.2 2.2 0 0 1 4 17.8v-5.6A2.2 2.2 0 0 1 6.2 10H8z"/>
+        <path d="M10 10V8a2 2 0 1 1 4 0v2"/>
+      </svg>
+    </button>
+    <button class="nav-item" type="button" data-page-target="bmi" aria-label="BMI">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 18a8 8 0 1 1 16 0"/>
+        <path d="M12 10v4"/>
+        <path d="M12 14l3-2"/>
+      </svg>
+    </button>
+    <button class="nav-item" type="button" data-page-target="tracking" aria-label="Tracking">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 9h2M19 9h2M6 6v6M18 6v6"/>
+        <rect x="8" y="8" width="8" height="2" rx="1"/>
+      </svg>
+    </button>
+    <button class="nav-item" type="button" data-page-target="nutrition" aria-label="Nutrition">
+      <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 3v8M11 3v8M8 7h3"/>
+        <path d="M16 3v18"/>
+        <path d="M16 11c2 0 3-1 3-3V3"/>
+      </svg>
+    </button>
+  </nav></div>
+  <div id="activityOverlay" class="activity-overlay" aria-hidden="true">
+    <div class="activity-screen">
+      <div class="activity-header">
+        <button id="closeActivityBtn" class="icon-button" type="button" aria-label="Close activity">&lt;</button>
+        <span id="activityStepCounter" class="day-badge">1 / 5</span>
+      </div>
+      <h2 id="activityTitle" class="activity-title">Workout</h2>
+      <p id="activityFocus" class="activity-focus">Full body session</p>
+      <div class="activity-thumbnail-stage" aria-label="Workout thumbnail preview">
+        <img id="activityPreviewImage" class="activity-preview-image" alt="Workout preview">
+        <div id="activityPreviewCaption" class="activity-preview-caption">Select an exercise</div>
+      </div>
+      <div id="sessionList" class="session-list"></div>
+    </div>
+  </div>
+  <div id="profileEditModal" class="profile-edit-modal" aria-hidden="true">
+    <div class="profile-edit-sheet" role="dialog" aria-modal="true" aria-label="Edit profile">
+      <h3>Edit Profile</h3>
+      <div class="input-group">
+        <label for="editNameInput">Name</label>
+        <input id="editNameInput" type="text" placeholder="Your name">
+      </div>
+      <div class="input-group">
+        <label for="editHandleInput">Username</label>
+        <input id="editHandleInput" type="text" placeholder="@username">
+      </div>
+      <div class="input-group">
+        <label for="editBioInput">Bio</label>
+        <input id="editBioInput" type="text" placeholder="Short bio">
+      </div>
+      <div class="profile-edit-actions">
+        <button id="cancelProfileEditBtn" class="profile-edit-cancel" type="button">Cancel</button>
+        <button id="saveProfileEditBtn" type="button">Save Changes</button>
+      </div>
+    </div>
+  </div>
+  <div id="coverEditModal" class="profile-edit-modal" aria-hidden="true">
+    <div class="profile-edit-sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Edit cover">
+      <h3>Edit Cover</h3>
+      <div class="input-group">
+        <label for="coverDisplayNameInput">Display name</label>
+        <input id="coverDisplayNameInput" type="text" placeholder="Displayed on the cover card">
+      </div>
+      <div class="input-group">
+        <label for="coverGreetingInput">Header label</label>
+        <input id="coverGreetingInput" type="text" placeholder="e.g. Profile">
+      </div>
+      <div class="input-group">
+        <label for="coverGoalBadgeInput">Goal badge</label>
+        <input id="coverGoalBadgeInput" type="text" placeholder="e.g. Goal: Lean Strength">
+      </div>
+      <div class="input-group">
+        <label for="coverQuoteInput">Motivational message</label>
+        <input id="coverQuoteInput" type="text" placeholder="Short motivational quote">
+      </div>
+      <div class="cover-edit-preview-wrap">
+        <p>Live preview</p>
+        <div class="cover-edit-preview-card">
+          <strong id="coverPreviewName">FitPulse Member</strong>
+          <span id="coverPreviewLabel">Profile</span>
+          <span id="coverPreviewGoal">@goal-smart</span>
+          <em id="coverPreviewQuote">"Small effort, every day. Big change, every month."</em>
+        </div>
+      </div>
+      <div class="profile-edit-actions">
+        <button id="coverChooseImageBtn" class="profile-edit-cancel" type="button">Choose Cover Image</button>
+        <button id="coverRestoreImageBtn" class="profile-edit-cancel" type="button">Use Default Cover</button>
+      </div>
+      <div class="profile-edit-actions">
+        <button id="cancelCoverEditBtn" class="profile-edit-cancel" type="button">Cancel</button>
+        <button id="saveCoverEditBtn" type="button">Save Changes</button>
+      </div>
+    </div>
+  </div>
+  <div id="appearanceModal" class="profile-edit-modal" aria-hidden="true">
+    <div class="profile-edit-sheet settings-sheet" role="dialog" aria-modal="true" aria-label="Appearance settings">
+      <h3>Appearance</h3>
+      <p class="settings-subtitle">Choose how the app should look on your iPhone.</p>
+      <div id="appearanceOptions" class="appearance-options" role="radiogroup" aria-label="Theme preference">
+        <button class="appearance-option" type="button" data-theme-option="system" role="radio" aria-checked="true">
+          <strong>Use Device Setting</strong>
+          <span>Automatically follow your iPhone appearance.</span>
+        </button>
+        <button class="appearance-option" type="button" data-theme-option="light" role="radio" aria-checked="false">
+          <strong>Light Mode</strong>
+          <span>Bright, clear surfaces with adaptive accents.</span>
+        </button>
+        <button class="appearance-option" type="button" data-theme-option="dark" role="radio" aria-checked="false">
+          <strong>Dark Mode</strong>
+          <span>Liquid glass over a deep black background.</span>
+        </button>
+      </div>
+      <div class="profile-edit-actions">
+        <button id="cancelAppearanceBtn" class="profile-edit-cancel" type="button">Cancel</button>
+        <button id="saveAppearanceBtn" type="button">Save Changes</button>
+      </div>
+    </div>
+  </div>
+  <div id="countryPickerModal" class="profile-edit-modal" aria-hidden="true">
+    <div class="profile-edit-sheet settings-sheet country-picker-sheet" role="dialog" aria-modal="true" aria-label="Country or food culture preference">
+      <h3>Country or Food Culture Preference</h3>
+      <p class="settings-subtitle">Pick meals that match local foods and cultural eating patterns.</p>
+      <div class="input-group">
+        <label for="countrySearchInput">Search country</label>
+        <input id="countrySearchInput" type="text" placeholder="Search country or cuisine">
+      </div>
+      <div id="countryPickerList" class="country-picker-list" aria-label="Country list"></div>
+      <div class="profile-edit-actions">
+        <button id="clearCountryPreferenceBtn" class="profile-edit-cancel" type="button">Use International / Mixed Meals</button>
+        <button id="closeCountryPickerBtn" type="button">Done</button>
+      </div>
+    </div>
+  </div>
+  <div id="buttonSubmenuFx" class="button-submenu-fx" aria-hidden="true"></div>
+    <script src="script.js"></script>`n</body>
+</html>
+
