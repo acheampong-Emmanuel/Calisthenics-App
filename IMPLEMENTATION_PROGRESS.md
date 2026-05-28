@@ -259,6 +259,63 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
 #### Files modified in this phase
 - `C:\Users\Emmanuel Acheampong\Documents\Codex\2026-05-22\files-mentioned-by-the-user-calisthenics\calisthenics_web_app_single_diagrams.html`
 
+---
+
+## Session Checkpoint - 2026-05-28 (Exercise image + animation integration pass)
+
+### Completed in this phase
+- Implemented a centralized **exercise media manifest** for all required 35 exercises with stable IDs, aliases, categories, hold flags, prop flags, and prompt metadata:
+  - `id`, `name`, `aliases`, `pose`, `motionPose`, `variant`, `category`, `isHold`, `requiresProp`, `image`, `animation`, `imagePrompt`, `animationPrompt`, `mediaVerified`.
+- Added robust media resolution by normalized exercise name and slug, including variant aliases (e.g. wall sit/wall sits, plank on knees, step touch side-to-side, step-ups onto chair).
+- Upgraded the visual generator to enforce a **pure black background** and a consistent trainer look with stable framing for all exercise stills.
+- Added generated **looping animation media** at runtime using pose-pair SVG interpolation/fade loops:
+  - Non-hold movements: alternating loop between primary pose and motion pose.
+  - Hold movements: subtle breathing/stabilization loop only.
+- Removed embedded text labels from exercise visuals so visuals remain clean and UI-provided labels stay authoritative.
+- Wired UI integration:
+  - Workout plan cards keep still demonstrations.
+  - Active exercise preview uses looped animation by default.
+  - Reduced-motion mode uses stills automatically.
+  - Added fallback behavior so failed motion media gracefully downgrades to still media.
+  - Added lazy-loading/async decoding for card media.
+- Restored live endpoint validation:
+  - `http://127.0.0.1:8765/calisthenics_web_app_single_diagrams.html` returned HTTP `200`.
+
+### Files modified in this phase
+- `C:\Users\Emmanuel Acheampong\Documents\Codex\2026-05-22\files-mentioned-by-the-user-calisthenics\calisthenics_web_app_single_diagrams.html`
+- `C:\Users\Emmanuel Acheampong\Documents\Codex\2026-05-22\files-mentioned-by-the-user-calisthenics\IMPLEMENTATION_PROGRESS.md`
+
+### Validation notes
+- Confirmed manifest includes **35 exercise entries**.
+- Confirmed runtime resolver path and fallback behavior are connected in:
+  - workout plan card media rendering
+  - active exercise overlay preview rendering
+  - media fallback handlers
+- Confirmed local live server endpoint response `200 OK`.
+
+### Known limitations (transparent)
+- This environment did not provide a direct photoreal MP4 generation/export pipeline in-session, so the app now uses a deterministic generated SVG still + looping SVG animation system for correctness, consistency, performance, and fallback safety.
+- The mapping architecture is ready for future drop-in replacement with photoreal local assets (`assets/exercises/images/*`, `assets/exercises/animations/*`) without UI rewiring.
+
+### Session Checkpoint - 2026-05-28 (Glass submenu consistency for setup selects)
+#### Completed in this phase
+- Extended custom glass dropdown behavior to setup selects:
+  - `fitnessGoalInput`
+  - `activityLevelInput`
+  - `dietaryPreferenceInput`
+  - `experienceInput`
+- Added mobile-friendly custom option cards (icon + title + short description) to match existing menu style.
+- Added smart open direction logic (`open-up`) so dropdowns near the bottom can open upward instead of clipping.
+- Integrated new select triggers with guided setup focus handling for tap-to-edit summary flow.
+- Added close-on-outside-tap and close-on-escape behavior for the new setup dropdown menus.
+- Synced menu UI labels/active states with profile state and existing change/recalculate flow.
+- Removed stale `viewWorkoutPlanBtn` dead listener path (single-action flow remains `Generate Plan` on page 2).
+- Added explicit guided-step labels in setup definitions to avoid undefined edit labels in accessibility strings.
+
+#### Files modified in this phase
+- `C:\Users\Emmanuel Acheampong\Documents\Codex\2026-05-22\files-mentioned-by-the-user-calisthenics\calisthenics_web_app_single_diagrams.html`
+- `C:\Users\Emmanuel Acheampong\Documents\Codex\2026-05-22\files-mentioned-by-the-user-calisthenics\IMPLEMENTATION_PROGRESS.md`
+
 ### Session Checkpoint - 2026-05-25 (Nutrition image accuracy pass)
 #### Completed in this phase
 - Implemented stricter meal and ingredient image resolution so named food items map to representative visuals more reliably.
@@ -381,3 +438,123 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
 - Upload the contents of `github-ready-export` to repository root (or keep same structure with `index.html` at root).
 - Enable GitHub Pages from branch root.
 - Relative paths are already configured for Pages-compatible hosting.
+
+### 2026-05-28 - Checkpoint 8 (Header/logo overlap legibility pass)
+
+#### Completed in this checkpoint
+- Fixed top logo chip overlap against heading text on key screens:
+  - BMI/setup page
+  - Muscle tracking page
+  - Nutrition page
+- Repositioned page brand chip on those screens to top-right to avoid center-title collisions.
+- Increased top spacing/padding where needed so first content rows are fully readable on iPhone.
+
+#### Files modified
+- `C:\Users\Emmanuel Acheampong\Documents\Codex\2026-05-22\files-mentioned-by-the-user-calisthenics\calisthenics_web_app_single_diagrams.html`
+
+#### Notes
+- This pass targeted readability and layout continuity only, without changing feature behavior or data flow.
+
+### 2026-05-28 - Checkpoint 9 (Exercise-to-animation media mapping pass)
+
+#### Objective
+- Enforce accurate workout visual mapping so generated exercises always render exercise-specific demonstration media instead of generic duplicates.
+
+#### Completed in this checkpoint
+- Added a centralized structured exercise media catalog in app script:
+  - Stable IDs
+  - Display names
+  - Alias matching
+  - Pose + variant mapping
+  - `mediaVerified` flags
+- Added robust normalization and resolver flow:
+  - `normalizeExerciseMediaName(...)`
+  - `resolveExerciseMedia(...)`
+  - `getExerciseMediaDescriptor(...)`
+- Replaced generic workout visual lookup with an ID-based render pipeline:
+  - Per-exercise variant overlays (wall, incline, chair, step, stretch, twist, up/down, etc.)
+  - Cached rendering for performance (`EXERCISE_MEDIA_RENDER_CACHE`)
+  - Guaranteed fallback for unknown exercises with explicit non-verified state.
+- Updated workout UI accessibility labels and captions to stay aligned with resolved exercise names:
+  - Plan card images
+  - Activity overlay list images
+  - Activity preview hero image
+
+#### Exercises audited and mapped in this pass
+- Bicycle Crunches
+- Bird Dogs
+- Bodyweight Squats
+- Burpees
+- Calf Raises
+- Calf Stretch
+- Chair Dips
+- Chair Squats
+- Glute Bridges
+- High Knees
+- Incline Push-ups
+- Inverted Rows
+- Jumping Jacks
+- Leg Raises
+- Lunges
+- March in Place
+- Mountain Climbers
+- Pike Push-ups
+- Plank
+- Plank (on knees)
+- Plank Up-Downs
+- Push-ups
+- Russian Twists
+- Seated Arm Circles
+- Seated Knee Raises
+- Seated Leg Lifts
+- Seated Torso Twists
+- Side Plank
+- Standing Calf Raises
+- Standing Side Leg Raises
+- Step Touch (side to side)
+- Step-Ups (onto chair)
+- Superman
+- Wall Push-ups
+- Wall Sit
+- Wall Sits (alias mapped to Wall Sit)
+
+#### Files modified
+- `C:\Users\Emmanuel Acheampong\Documents\Codex\2026-05-22\files-mentioned-by-the-user-calisthenics\calisthenics_web_app_single_diagrams.html`
+
+#### Validation performed
+- Local live endpoint check:
+  - `http://127.0.0.1:8765/calisthenics_web_app_single_diagrams.html?v=motion_button_glass_20260524&live=setup_glass_selects_20260528`
+  - Result: `200 OK`
+- Mapping integrity check:
+  - Audited generated-plan exercise names and aligned all to catalog IDs/aliases.
+
+#### Known limitations
+- Current workout visuals are deterministic SVG demonstration renders (fast and local) rather than video/GIF assets.
+- For any newly introduced exercise name not in the catalog, a controlled fallback still renders (non-broken), and the entry is marked unverified in runtime resolver output.
+
+### 2026-05-28 - Checkpoint 10 (Setup/menu visibility + header overlap hotfix)
+
+#### Completed in this checkpoint
+- Removed legacy setup navigation UI remnants so only `Generate Plan` remains:
+  - hard-removed runtime `#setupNextBtn`, `#setupBackBtn`, and `.setup-nav-row` if present in stale states.
+- Fixed submenu clipping/hidden behavior inside guided setup:
+  - introduced `submenu-open` state on `.setup-step`.
+  - promoted open submenu step z-index and overflow visibility.
+  - synchronized submenu-open state for all setup select menus plus gender/body-type menus.
+- Reduced header/logo collisions with titles and greetings:
+  - forced top-right placement for page-brand on BMI, tracking, and nutrition screens with stronger selectors.
+  - increased top spacing for the BMI header row to maintain legibility.
+
+#### Files modified
+- `C:\Users\Emmanuel Acheampong\Documents\Codex\2026-05-22\files-mentioned-by-the-user-calisthenics\calisthenics_web_app_single_diagrams.html`
+- `C:\Users\Emmanuel Acheampong\Documents\Codex\2026-05-22\files-mentioned-by-the-user-calisthenics\IMPLEMENTATION_PROGRESS.md`
+
+#### Validation performed
+- Static code validation via targeted grep/readback of updated selectors and setup flow functions.
+- Confirmed explicit plan generation action still anchored to `#calculateBtn` click path.
+
+#### Remaining in this phase
+- Run final visual pass in live page for:
+  - setup submenu expansion near lower viewport
+  - page-brand overlap on all tabs after cache-bust reload
+  - submenu glass consistency on every select/menu variant.
