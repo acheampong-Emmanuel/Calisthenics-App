@@ -1652,9 +1652,14 @@ const exerciseImages = {
       }
       if (!document.body.dataset.ingredientPopoverDocBound) {
         document.addEventListener('click', event => {
-          if (!container.contains(event.target)) {
+          const target = event.target instanceof Element ? event.target : null;
+          if (target?.closest('#ingredientPopoverLayer')) return;
+          if (!target || !container.contains(target)) {
             closeIngredientPopovers(document);
           }
+        });
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape') closeIngredientPopovers(document);
         });
         window.addEventListener('resize', () => closeIngredientPopovers(document), { passive: true });
         window.addEventListener('scroll', () => closeIngredientPopovers(document), { passive: true });

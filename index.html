@@ -5086,6 +5086,8 @@
     .ingredient-popover-floating {
       position: fixed;
       z-index: 221;
+      right: auto;
+      bottom: auto;
       width: min(232px, calc(100vw - 20px));
       border-radius: 12px;
       border: 1px solid rgba(var(--ui-vibrant-a-rgb), 0.44);
@@ -5097,6 +5099,7 @@
       display: grid;
       gap: 0.32rem;
       opacity: 0;
+      pointer-events: auto;
       transform: translateY(8px) scale(0.98);
       transform-origin: bottom left;
       transition: opacity 0.18s ease, transform 0.2s ease;
@@ -7845,9 +7848,14 @@ const exerciseImages = {
       }
       if (!document.body.dataset.ingredientPopoverDocBound) {
         document.addEventListener('click', event => {
-          if (!container.contains(event.target)) {
+          const target = event.target instanceof Element ? event.target : null;
+          if (target?.closest('#ingredientPopoverLayer')) return;
+          if (!target || !container.contains(target)) {
             closeIngredientPopovers(document);
           }
+        });
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape') closeIngredientPopovers(document);
         });
         window.addEventListener('resize', () => closeIngredientPopovers(document), { passive: true });
         window.addEventListener('scroll', () => closeIngredientPopovers(document), { passive: true });

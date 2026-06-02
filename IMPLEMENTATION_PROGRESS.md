@@ -704,3 +704,18 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
 - `script.js`
 - `README.md`
 - `IMPLEMENTATION_PROGRESS.md`
+
+### 2026-06-02 - Checkpoint 17 (Ingredient popover fix)
+
+#### Completed in this checkpoint
+- Fixed floating ingredient detail popovers so they no longer inherit template positioning from the hidden in-card popover.
+- Explicitly reset floating popover `right` and `bottom` positioning so JavaScript-controlled fixed `left/top` placement works correctly.
+- Enabled pointer interactions on the floating popover layer.
+- Prevented clicks inside the floating popover from immediately closing it.
+- Added Escape-key closing for open ingredient popovers.
+
+#### Files modified
+- `index.html`
+- `script.js`
+- `style.css`
+- `IMPLEMENTATION_PROGRESS.md`

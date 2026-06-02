@@ -5011,6 +5011,8 @@
     .ingredient-popover-floating {
       position: fixed;
       z-index: 221;
+      right: auto;
+      bottom: auto;
       width: min(232px, calc(100vw - 20px));
       border-radius: 12px;
       border: 1px solid rgba(var(--ui-vibrant-a-rgb), 0.44);
@@ -5022,6 +5024,7 @@
       display: grid;
       gap: 0.32rem;
       opacity: 0;
+      pointer-events: auto;
       transform: translateY(8px) scale(0.98);
       transform-origin: bottom left;
       transition: opacity 0.18s ease, transform 0.2s ease;
