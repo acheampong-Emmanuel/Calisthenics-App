@@ -1499,11 +1499,39 @@ const exerciseImages = {
       return createIngredientThumbnailDataUri(ingredientName, meal, plan);
     }
 
+    function getStableIngredientPhotoSig(ingredientName, meal = null, plan = null) {
+      const key = `${normalizeIngredientKey(ingredientName)}::${meal?.cuisineCountry || plan?.countryPreference || NO_COUNTRY_PREFERENCE}`;
+      let hash = 0;
+      for (let index = 0; index < key.length; index += 1) {
+        hash = ((hash << 5) - hash) + key.charCodeAt(index);
+        hash |= 0;
+      }
+      return Math.abs(hash % 100000);
+    }
+
+    function getIngredientRegionPhotoPhrase(meal = null, plan = null) {
+      const countryCode = normalizeCountryCode(meal?.cuisineCountry || plan?.countryPreference || NO_COUNTRY_PREFERENCE);
+      const country = getCountryOptionByCode(countryCode);
+      if (!country || country.code === NO_COUNTRY_PREFERENCE) return 'global cuisine';
+      return `${country.label} cuisine`;
+    }
+
+    function buildPhotorealisticIngredientUrl(ingredientName, meal = null, plan = null) {
+      const ingredient = normalizeIngredientKey(ingredientName);
+      if (!ingredient) return FALLBACK_INGREDIENT_IMAGE;
+      const regionPhrase = getIngredientRegionPhotoPhrase(meal, plan);
+      const keywords = [ingredient, regionPhrase, 'food', 'ingredient']
+        .map(part => encodeURIComponent(part.replace(/\s+/g, ' ').trim()))
+        .filter(Boolean)
+        .join(',');
+      const sig = getStableIngredientPhotoSig(ingredient, meal, plan);
+      return `https://loremflickr.com/360/360/${keywords}?lock=${sig}`;
+    }
+
     function getIngredientImageUrl(ingredientName, meal = null, plan = null) {
       const text = normalizeIngredientKey(ingredientName);
       if (!text) return FALLBACK_INGREDIENT_IMAGE;
-      // Use local generated thumbnails first so ingredient images work offline and cannot break on remote failures.
-      return getIngredientFallbackImage(ingredientName, meal, plan);
+      return buildPhotorealisticIngredientUrl(ingredientName, meal, plan);
     }
 
     function escapeHtml(value) {
@@ -1650,11 +1678,11 @@ const exerciseImages = {
           const safeBenefit = escapeHtml(insight.benefit);
           return `
             <li class="ingredient-chip" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-pop-side="${popSide}">
-              <img class="ingredient-photo" src="${imageUrl}" alt="${safeName}" loading="lazy" decoding="async" onload="this.classList.add('loaded');" onerror="this.onerror=null;this.src='${imageFallback}';this.classList.add('loaded');">
+              <img class="ingredient-photo" src="${imageUrl}" alt="${safeName}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="this.classList.add('loaded');" onerror="this.onerror=null;this.src='${imageFallback}';this.classList.add('loaded');">
               <span class="ingredient-name">${safeName}</span>
               <div class="ingredient-popover" role="dialog" aria-label="${safeName} nutrition detail">
                 <div class="ingredient-pop-header">
-                  <img class="ingredient-pop-photo" src="${imageUrl}" alt="${safeName}" loading="lazy" decoding="async" onload="this.classList.add('loaded');" onerror="this.onerror=null;this.src='${imageFallback}';this.classList.add('loaded');">
+                  <img class="ingredient-pop-photo" src="${imageUrl}" alt="${safeName}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onload="this.classList.add('loaded');" onerror="this.onerror=null;this.src='${imageFallback}';this.classList.add('loaded');">
                   <div>
                     <p class="ingredient-pop-title">${safeName}</p>
                     <p class="ingredient-pop-summary">${safeSummary}</p>

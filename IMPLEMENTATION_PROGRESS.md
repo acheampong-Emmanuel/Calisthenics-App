@@ -686,3 +686,21 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
 - `images/aeropulse-icon.svg`
 - `README.md`
 - `IMPLEMENTATION_PROGRESS.md`
+
+### 2026-06-02 - Checkpoint 16 (Region-aware ingredient photos)
+
+#### Completed in this checkpoint
+- Changed ingredient image selection from local thumbnail-first to photorealistic photo-first.
+- Built ingredient photo URLs from:
+  - the exact ingredient label
+  - the active meal/cuisine country
+  - food/ingredient keywords
+- Added a stable region-aware photo signature so changing the food culture can produce different ingredient imagery while keeping the same region stable across reloads.
+- Kept the generated local SVG thumbnail as the `onerror` fallback so broken remote photos do not leave empty image boxes.
+- Added `referrerpolicy="no-referrer"` to ingredient photo requests.
+
+#### Files modified
+- `index.html`
+- `script.js`
+- `README.md`
+- `IMPLEMENTATION_PROGRESS.md`

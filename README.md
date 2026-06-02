@@ -38,4 +38,5 @@ Open `index.html` directly, or serve the folder with a static server.
 ## Notes
 - Runtime paths use relative links for Pages compatibility.
 - Local app assets are inside `images/`.
-- Ingredient thumbnails are generated locally; meal/cuisine visuals should continue moving toward local-only fallbacks.
+- Ingredient thumbnails request region-aware photorealistic food photos and fall back to generated local thumbnails when a photo cannot load.
+- Meal/cuisine visuals should continue moving toward local-only fallbacks.
