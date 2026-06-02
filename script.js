@@ -4633,6 +4633,7 @@ const exerciseImages = {
       nameInput.value = profileState.name;
       handleInput.value = profileState.handle;
       bioInput.value = profileState.bio;
+      updateHardwareTrackingUI();
       updateProfileAppleHealthUI();
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');

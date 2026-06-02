@@ -622,3 +622,20 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
 
 #### Validation note
 - Static CSS diff validation completed. Browser automation remains blocked by the local runtime issue, so a visual pass should still be done manually in the in-app browser across iPhone viewport sizes.
+
+### 2026-06-02 - Checkpoint 13 (Move motion tracking to Edit Profile)
+
+#### Completed in this checkpoint
+- Moved the iPhone motion tracking control out of the workout plan panel.
+- Added the motion tracking toggle/status/count inside Cover page → Edit Profile.
+- Kept the existing local motion permission/data flow intact:
+  - `enableMotionBtn`
+  - `motionStatusText`
+  - `motionCountText`
+- Refreshed motion status whenever Edit Profile opens so the button and pulse count are current.
+- Kept Apple Health and iPhone Motion controls together in profile settings as local device-tracking options.
+
+#### Files modified
+- `index.html`
+- `script.js`
+- `IMPLEMENTATION_PROGRESS.md`

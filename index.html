@@ -5717,11 +5717,6 @@
               <strong id="heroModeValue">Smart</strong>
             </div>
           </div>
-          <div class="hardware-track-row">
-            <button id="enableMotionBtn" class="hardware-track-btn" type="button">Enable iPhone Motion Tracking</button>
-            <p id="motionStatusText" class="hardware-track-status">Motion sensor: off</p>
-            <p id="motionCountText" class="hardware-track-count">0 live activity pulses</p>
-          </div>
           <div id="planPager" class="plan-pager" style="display: none;">
             <span id="planPagerMeta" class="plan-pager-meta">Week 1</span>
             <div class="plan-pager-buttons">
@@ -6055,6 +6050,15 @@
       <div class="input-group">
         <label for="editBioInput">Bio</label>
         <input id="editBioInput" type="text" placeholder="Short bio">
+      </div>
+      <div class="profile-health-connect">
+        <div>
+          <span>iPhone Motion</span>
+          <strong>Local motion tracking</strong>
+          <p id="motionStatusText">Motion sensor: off</p>
+          <p id="motionCountText">0 live activity pulses</p>
+        </div>
+        <button id="enableMotionBtn" class="profile-health-btn" type="button">Turn On</button>
       </div>
       <div class="profile-health-connect">
         <div>
@@ -11287,6 +11291,7 @@ const exerciseImages = {
       nameInput.value = profileState.name;
       handleInput.value = profileState.handle;
       bioInput.value = profileState.bio;
+      updateHardwareTrackingUI();
       updateProfileAppleHealthUI();
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
