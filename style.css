@@ -3554,6 +3554,162 @@
       font-size: 0.7rem;
       color: rgba(214, 232, 251, 0.82);
     }
+    .apple-health-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(var(--ui-vibrant-b-rgb), 0.34);
+      background:
+        radial-gradient(120% 100% at 0% 0%, rgba(var(--ui-vibrant-b-rgb), 0.24), transparent 58%),
+        radial-gradient(110% 95% at 100% 100%, rgba(var(--ui-vibrant-c-rgb), 0.18), transparent 62%),
+        linear-gradient(135deg, rgba(var(--ui-vibrant-a-rgb), 0.16), rgba(var(--ui-vibrant-b-rgb), 0.12)),
+        rgba(10, 18, 32, 0.62);
+      padding: 0.72rem;
+      display: grid;
+      gap: 0.58rem;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        0 12px 20px rgba(6, 13, 24, 0.24),
+        0 0 18px rgba(var(--ui-vibrant-b-rgb), 0.14);
+      backdrop-filter: blur(16px) saturate(1.12);
+      -webkit-backdrop-filter: blur(16px) saturate(1.12);
+    }
+    .apple-health-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      background:
+        linear-gradient(114deg, transparent 0 34%, rgba(232, 245, 255, 0.12) 46%, transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.08), transparent 36%);
+      opacity: 0.72;
+    }
+    .apple-health-card > * {
+      position: relative;
+      z-index: 1;
+    }
+    .apple-health-head {
+      display: flex;
+      align-items: center;
+      gap: 0.58rem;
+    }
+    .apple-health-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: rgba(245, 251, 255, 0.96);
+      border: 1px solid rgba(214, 238, 255, 0.32);
+      background:
+        linear-gradient(145deg, rgba(var(--ui-vibrant-b-rgb), 0.34), rgba(var(--ui-vibrant-a-rgb), 0.18)),
+        rgba(126, 157, 195, 0.22);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 0 14px rgba(var(--ui-vibrant-b-rgb), 0.24);
+    }
+    .apple-health-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .apple-health-kicker {
+      display: block;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(218, 234, 251, 0.78);
+      font-weight: 700;
+    }
+    .apple-health-head h3 {
+      margin: 0.04rem 0 0;
+      font-size: 1rem;
+      color: #f4f9ff;
+    }
+    .apple-health-status,
+    .apple-health-privacy,
+    .apple-health-updated {
+      margin: 0;
+      font-size: 0.72rem;
+      line-height: 1.32;
+      color: rgba(222, 237, 252, 0.84);
+    }
+    .apple-health-privacy {
+      border-radius: 12px;
+      border: 1px solid rgba(var(--ui-vibrant-b-rgb), 0.22);
+      background: rgba(7, 15, 27, 0.34);
+      padding: 0.46rem 0.52rem;
+      color: rgba(232, 244, 255, 0.9);
+    }
+    .apple-health-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.4rem;
+    }
+    .apple-health-grid div {
+      min-width: 0;
+      border-radius: 13px;
+      border: 1px solid rgba(198, 226, 255, 0.24);
+      background:
+        linear-gradient(150deg, rgba(var(--ui-vibrant-a-rgb), 0.18), rgba(var(--ui-vibrant-c-rgb), 0.1)),
+        rgba(9, 17, 31, 0.42);
+      padding: 0.44rem 0.38rem;
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.14);
+    }
+    .apple-health-grid span {
+      display: block;
+      font-size: 0.58rem;
+      color: rgba(218, 234, 251, 0.72);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .apple-health-grid strong {
+      display: block;
+      margin-top: 0.14rem;
+      font-size: 0.86rem;
+      color: #f8fbff;
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+    }
+    .apple-health-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.44rem;
+    }
+    .apple-health-btn {
+      min-height: 40px;
+      border-radius: 13px;
+      border: 1px solid rgba(var(--ui-vibrant-b-rgb), 0.4);
+      background:
+        linear-gradient(135deg, rgba(var(--ui-vibrant-b-rgb), 0.62), rgba(var(--ui-vibrant-a-rgb), 0.42)),
+        rgba(17, 33, 54, 0.7);
+      color: #f7fbff;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 10px 16px rgba(6, 13, 24, 0.24);
+    }
+    .apple-health-btn.secondary {
+      border-color: rgba(213, 233, 255, 0.28);
+      background:
+        linear-gradient(135deg, rgba(185, 211, 239, 0.2), rgba(var(--ui-vibrant-c-rgb), 0.14)),
+        rgba(12, 22, 38, 0.54);
+    }
+    .apple-health-btn:active {
+      transform: scale(0.985);
+    }
+    @media (max-width: 380px) {
+      .apple-health-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .apple-health-actions {
+        grid-template-columns: 1fr;
+      }
+    }
     .tracking-exercises {
       position: relative;
       overflow: hidden;
@@ -3896,6 +4052,67 @@
     }
     .profile-edit-sheet .input-group {
       margin-bottom: 0.65rem;
+    }
+    .profile-health-connect {
+      margin: 0.18rem 0 0.82rem;
+      border-radius: 16px;
+      border: 1px solid rgba(var(--ui-vibrant-b-rgb), 0.32);
+      background:
+        radial-gradient(110% 120% at 0% 0%, rgba(var(--ui-vibrant-b-rgb), 0.2), transparent 58%),
+        linear-gradient(135deg, rgba(var(--ui-vibrant-a-rgb), 0.15), rgba(var(--ui-vibrant-c-rgb), 0.11)),
+        rgba(9, 17, 31, 0.5);
+      padding: 0.58rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.58rem;
+      align-items: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), 0 10px 18px rgba(4, 10, 20, 0.22);
+    }
+    .profile-health-connect span {
+      display: block;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(218, 234, 251, 0.76);
+      font-weight: 800;
+    }
+    .profile-health-connect strong {
+      display: block;
+      margin-top: 0.08rem;
+      color: #f6fbff;
+      font-size: 0.86rem;
+      line-height: 1.2;
+    }
+    .profile-health-connect p {
+      margin: 0.16rem 0 0;
+      color: rgba(224, 238, 253, 0.82);
+      font-size: 0.66rem;
+      line-height: 1.3;
+    }
+    .profile-health-btn {
+      min-height: 38px;
+      min-width: 82px;
+      border-radius: 13px;
+      border: 1px solid rgba(var(--ui-vibrant-b-rgb), 0.42);
+      background:
+        linear-gradient(135deg, rgba(var(--ui-vibrant-b-rgb), 0.58), rgba(var(--ui-vibrant-a-rgb), 0.38)),
+        rgba(17, 33, 54, 0.72);
+      color: #f8fcff;
+      font-size: 0.74rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 14px rgba(6, 13, 24, 0.22);
+    }
+    .profile-health-btn:active {
+      transform: scale(0.985);
+    }
+    @media (max-width: 360px) {
+      .profile-health-connect {
+        grid-template-columns: 1fr;
+      }
+      .profile-health-btn {
+        width: 100%;
+      }
     }
     .profile-edit-actions {
       display: grid;

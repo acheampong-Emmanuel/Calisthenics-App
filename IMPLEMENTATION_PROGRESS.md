@@ -558,3 +558,46 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
   - setup submenu expansion near lower viewport
   - page-brand overlap on all tabs after cache-bust reload
   - submenu glass consistency on every select/menu variant.
+
+### 2026-06-02 - Checkpoint 11 (Apple Watch / Apple Health local-only tracking)
+
+#### Completed in this checkpoint
+- Added an Apple Watch / Apple Health sync card to the Muscle Quality tracking page.
+- Added persisted `progressState.appleHealth` data for:
+  - steps
+  - active energy calories
+  - workout minutes
+  - heart rate
+  - workout count
+  - last sync time
+  - connection/source state
+- Added a browser-side local bridge API:
+  - `window.AeroPulseAppleHealth.importHealthSnapshot(payload)`
+  - `window.AeroPulseAppleHealth.requestSync()`
+  - `window.AeroPulseAppleHealth.getState()`
+- Added HealthKit bridge request support for a local iPhone companion through:
+  - `window.AeroPulseHealthKit.requestAuthorization(...)`
+  - `window.webkit.messageHandlers.aeroPulseHealthKit.postMessage(...)`
+- Added a sample import action so the current static web app can verify the data flow before native HealthKit integration exists.
+- Added a matching local Apple Health control inside Edit Profile so users can launch the local HealthKit connection from profile settings.
+- Fed imported watch metrics into tracking:
+  - active calories can drive the burn estimate
+  - workout minutes contribute to estimated active time
+  - imported activity credits the daily activity/streak map
+  - summary text identifies when Apple Watch data is being used
+
+#### Files modified
+- `index.html`
+- `style.css`
+- `script.js`
+- `IMPLEMENTATION_PROGRESS.md`
+
+#### Important platform note
+- Apple Watch data is exposed to third-party products through Apple Health / HealthKit. A static GitHub Pages web app cannot directly read HealthKit data by itself.
+- The current repo is now ready for a local iPhone companion to request HealthKit authorization, read Apple Watch-backed Health data on-device, and pass sanitized metrics into the web app bridge.
+- Privacy requirement: Apple Watch and Apple Health metrics must stay on the user's device. The app stores imported values only in local browser storage and must not send private health metrics to any server unless the user explicitly adds a separate export/share flow.
+
+#### Next native-app step
+- Build a small local iPhone companion with the HealthKit capability enabled.
+- Request user permission for step count, active energy burned, Apple exercise time, heart rate, and workouts.
+- After reading HealthKit samples, call `window.AeroPulseAppleHealth.importHealthSnapshot(...)` inside the web view with the latest metrics.

@@ -236,7 +236,17 @@ const exerciseImages = {
       dailyActivity: {},
       lastActivityAt: 0,
       hardwareActivityCount: 0,
-      exercisePulseCounts: {}
+      exercisePulseCounts: {},
+      appleHealth: {
+        connected: false,
+        source: '',
+        lastSyncAt: 0,
+        steps: 0,
+        activeEnergyCalories: 0,
+        workoutMinutes: 0,
+        heartRate: 0,
+        workouts: 0
+      }
     };
     let coverImageState = '';
     let coverSettingsState = { ...defaultCoverSettings };
@@ -2450,7 +2460,17 @@ const exerciseImages = {
             dailyActivity: parsed.dailyActivity || {},
             lastActivityAt: parsed.lastActivityAt || 0,
             hardwareActivityCount: parsed.hardwareActivityCount || 0,
-            exercisePulseCounts: parsed.exercisePulseCounts || {}
+            exercisePulseCounts: parsed.exercisePulseCounts || {},
+            appleHealth: {
+              connected: Boolean(parsed.appleHealth?.connected),
+              source: String(parsed.appleHealth?.source || ''),
+              lastSyncAt: Number(parsed.appleHealth?.lastSyncAt) || 0,
+              steps: Number(parsed.appleHealth?.steps) || 0,
+              activeEnergyCalories: Number(parsed.appleHealth?.activeEnergyCalories) || 0,
+              workoutMinutes: Number(parsed.appleHealth?.workoutMinutes) || 0,
+              heartRate: Number(parsed.appleHealth?.heartRate) || 0,
+              workouts: Number(parsed.appleHealth?.workouts) || 0
+            }
           };
         }
       } catch (_error) {}
@@ -3275,6 +3295,164 @@ const exerciseImages = {
       return weeks;
     }
 
+    function getAppleHealthState() {
+      if (!progressState.appleHealth) {
+        progressState.appleHealth = {
+          connected: false,
+          source: '',
+          lastSyncAt: 0,
+          steps: 0,
+          activeEnergyCalories: 0,
+          workoutMinutes: 0,
+          heartRate: 0,
+          workouts: 0
+        };
+      }
+      return progressState.appleHealth;
+    }
+
+    function formatMetricNumber(value, suffix = '') {
+      const numeric = Number(value) || 0;
+      if (numeric <= 0) return '--';
+      return `${numeric.toLocaleString()}${suffix}`;
+    }
+
+    function formatAppleHealthSyncLabel(timestamp) {
+      if (!timestamp) return 'No Apple Health data imported yet.';
+      const date = new Date(timestamp);
+      return `Last sync: ${date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} at ${date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}`;
+    }
+
+    function updateAppleHealthUI() {
+      const health = getAppleHealthState();
+      const status = document.getElementById('appleHealthStatus');
+      const steps = document.getElementById('appleHealthSteps');
+      const calories = document.getElementById('appleHealthCalories');
+      const minutes = document.getElementById('appleHealthMinutes');
+      const heartRate = document.getElementById('appleHealthHeartRate');
+      const updated = document.getElementById('appleHealthUpdated');
+      if (status) {
+        if (health.connected && health.lastSyncAt) {
+          status.textContent = `Connected through ${health.source || 'Apple Health'}. Watch activity is feeding the tracker.`;
+        } else if (health.connected) {
+          status.textContent = `Connected through ${health.source || 'Apple Health'}. Waiting for the first HealthKit sync.`;
+        } else {
+          status.textContent = 'Ready for a local HealthKit connection. Apple Watch data stays on this device.';
+        }
+      }
+      if (steps) steps.textContent = formatMetricNumber(health.steps);
+      if (calories) calories.textContent = formatMetricNumber(health.activeEnergyCalories, ' kcal');
+      if (minutes) minutes.textContent = formatMetricNumber(health.workoutMinutes, ' min');
+      if (heartRate) heartRate.textContent = formatMetricNumber(health.heartRate, ' bpm');
+      if (updated) updated.textContent = formatAppleHealthSyncLabel(health.lastSyncAt);
+      updateProfileAppleHealthUI();
+    }
+
+    function updateProfileAppleHealthUI() {
+      const health = getAppleHealthState();
+      const status = document.getElementById('profileAppleHealthStatus');
+      const button = document.getElementById('profileAppleHealthBtn');
+      if (status) {
+        if (health.connected && health.lastSyncAt) {
+          status.textContent = `${health.source || 'Apple Health'} is connected locally. ${formatAppleHealthSyncLabel(health.lastSyncAt)}.`;
+        } else if (health.connected) {
+          status.textContent = `${health.source || 'Apple Health'} is enabled locally. Waiting for HealthKit data.`;
+        } else {
+          status.textContent = 'Private by design. Health metrics stay on this device.';
+        }
+      }
+      if (button) {
+        button.textContent = health.connected ? 'On' : 'Turn On';
+        button.setAttribute('aria-pressed', health.connected ? 'true' : 'false');
+      }
+    }
+
+    function normalizeAppleHealthPayload(payload = {}) {
+      const source = payload.source || payload.device || 'Apple Health';
+      return {
+        connected: true,
+        source: String(source),
+        lastSyncAt: Number(payload.lastSyncAt || payload.timestamp || Date.now()) || Date.now(),
+        steps: Math.max(0, Math.round(Number(payload.steps ?? payload.stepCount) || 0)),
+        activeEnergyCalories: Math.max(0, Math.round(Number(payload.activeEnergyCalories ?? payload.activeCalories ?? payload.calories) || 0)),
+        workoutMinutes: Math.max(0, Math.round(Number(payload.workoutMinutes ?? payload.exerciseMinutes ?? payload.minutes) || 0)),
+        heartRate: Math.max(0, Math.round(Number(payload.heartRate ?? payload.averageHeartRate ?? payload.bpm) || 0)),
+        workouts: Math.max(0, Math.round(Number(payload.workouts ?? payload.workoutCount) || 0))
+      };
+    }
+
+    function importAppleHealthSnapshot(payload = {}) {
+      const health = normalizeAppleHealthPayload(payload);
+      progressState.appleHealth = health;
+      if (health.steps > 0 || health.activeEnergyCalories > 0 || health.workoutMinutes > 0 || health.workouts > 0) {
+        const todayKey = toLocalDateKey(new Date(health.lastSyncAt));
+        const activityCredit = Math.max(1, Math.round((health.workoutMinutes || 0) / 12), health.workouts || 0);
+        progressState.dailyActivity[todayKey] = Math.max(progressState.dailyActivity[todayKey] || 0, activityCredit);
+        progressState.lastActivityAt = Math.max(progressState.lastActivityAt || 0, health.lastSyncAt);
+      }
+      saveProgress();
+      updateAppleHealthUI();
+      updateActivityTracker();
+      return { ok: true, appleHealth: { ...health } };
+    }
+
+    async function connectAppleHealth() {
+      const health = getAppleHealthState();
+      try {
+        const bridge = window.AeroPulseHealthKit || window.webkit?.messageHandlers?.aeroPulseHealthKit;
+        if (window.AeroPulseHealthKit?.requestAuthorization) {
+          const payload = await window.AeroPulseHealthKit.requestAuthorization({
+            read: ['stepCount', 'activeEnergyBurned', 'appleExerciseTime', 'heartRate', 'workouts']
+          });
+          if (payload) importAppleHealthSnapshot(payload);
+          return;
+        }
+        if (bridge?.postMessage) {
+          bridge.postMessage({
+            type: 'requestHealthAuthorization',
+            read: ['stepCount', 'activeEnergyBurned', 'appleExerciseTime', 'heartRate', 'workouts']
+          });
+          health.connected = true;
+          health.source = 'iOS HealthKit bridge';
+          saveProgress();
+          updateAppleHealthUI();
+          return;
+        }
+        const status = document.getElementById('appleHealthStatus');
+        if (status) {
+          status.textContent = 'Apple Health requires a local iPhone companion with HealthKit permission. No health data leaves the device.';
+        }
+        const profileStatus = document.getElementById('profileAppleHealthStatus');
+        if (profileStatus) {
+          profileStatus.textContent = 'Use a local iPhone companion with HealthKit permission. No health data leaves the device.';
+        }
+      } catch (_error) {
+        const status = document.getElementById('appleHealthStatus');
+        if (status) status.textContent = 'Apple Health connection failed. Check HealthKit permissions in the iOS wrapper.';
+        const profileStatus = document.getElementById('profileAppleHealthStatus');
+        if (profileStatus) profileStatus.textContent = 'Apple Health connection failed. Check local HealthKit permissions.';
+      }
+    }
+
+    function importSampleAppleHealthData() {
+      const sample = {
+        source: 'Apple Watch sample',
+        steps: 8420,
+        activeEnergyCalories: 486,
+        workoutMinutes: 38,
+        heartRate: 124,
+        workouts: 1,
+        lastSyncAt: Date.now()
+      };
+      importAppleHealthSnapshot(sample);
+    }
+
+    window.AeroPulseAppleHealth = {
+      importHealthSnapshot: importAppleHealthSnapshot,
+      requestSync: connectAppleHealth,
+      getState: () => ({ ...getAppleHealthState() })
+    };
+
     function updateHardwareTrackingUI() {
       const motionStatusText = document.getElementById('motionStatusText');
       const motionCountText = document.getElementById('motionCountText');
@@ -3286,6 +3464,7 @@ const exerciseImages = {
       if (motionCountText) {
         motionCountText.textContent = `${progressState.hardwareActivityCount || 0} live activity pulses`;
       }
+      updateAppleHealthUI();
       refreshOverlayRows();
     }
 
@@ -3399,11 +3578,14 @@ const exerciseImages = {
         mesomorph: 1,
         endomorph: 0.92
       };
+      const appleHealth = getAppleHealthState();
       const completionRatio = totalMoves > 0 ? completedMoves / totalMoves : 0;
       const avgMinutesPerMove = motionState.enabled ? 1.7 : 1.35;
-      const estimatedMinutes = Math.max(0, (completedMoves * avgMinutesPerMove) + (progressState.hardwareActivityCount * 0.08));
+      const estimatedMinutes = Math.max(0, (completedMoves * avgMinutesPerMove) + (progressState.hardwareActivityCount * 0.08) + (appleHealth.workoutMinutes || 0));
       const met = (categoryFactor[lastCategory] || categoryFactor.Smart) * (bodyTypeFactor[bodyType] || 1) * (1 + completionRatio * 0.18);
-      const calories = Math.max(0, Math.round((met * 3.5 * weight / 200) * estimatedMinutes));
+      const planCalories = Math.max(0, Math.round((met * 3.5 * weight / 200) * estimatedMinutes));
+      const watchCalories = Math.max(0, Math.round(appleHealth.activeEnergyCalories || 0));
+      const calories = Math.max(planCalories, watchCalories);
       const targetMinutes = Math.max(12, totalMoves * 1.45);
       const targetCalories = Math.max(180, Math.round((met * 3.5 * weight / 200) * targetMinutes));
       const caloriePercent = Math.min(100, Math.round((calories / targetCalories) * 100));
@@ -3510,6 +3692,7 @@ const exerciseImages = {
       const latestLabel = getLatestActivityLabel();
       const remainingMoves = Math.max(0, totalMoves - completedMoves);
       const metrics = estimateCalorieInsights(completedMoves, totalMoves, completedDays, totalDays);
+      const appleHealth = getAppleHealthState();
 
       if (activityCompletedMoves) activityCompletedMoves.textContent = `${completedMoves}`;
       if (activityTotalMoves) activityTotalMoves.textContent = `${totalMoves}`;
@@ -3520,7 +3703,11 @@ const exerciseImages = {
       if (heroPlanValue) heroPlanValue.textContent = `${streak} day${streak === 1 ? '' : 's'}`;
       if (heroProgressValue) heroProgressValue.textContent = `${percent}%`;
       if (heroProgressNote) heroProgressNote.textContent = `${completedMoves}/${totalMoves || 0} moves`;
-      if (heroTrackingType) heroTrackingType.textContent = motionState.enabled ? 'Live tracking + motion' : (streak > 0 ? 'Live tracking' : 'Tracking ready');
+      if (heroTrackingType) {
+        heroTrackingType.textContent = appleHealth.connected
+          ? 'Apple Watch + motion'
+          : (motionState.enabled ? 'Live tracking + motion' : (streak > 0 ? 'Live tracking' : 'Tracking ready'));
+      }
       if (taglineText) {
         taglineText.textContent = totalMoves > 0
           ? `Goal plan: ${currentPlanMeta.weeks} week${currentPlanMeta.weeks === 1 ? '' : 's'} / ${currentPlanMeta.targetSessions} sessions. ${remainingMoves} moves remaining to target.`
@@ -3547,7 +3734,8 @@ const exerciseImages = {
         summaryTitle.textContent = `${completedMoves} moves completed â€¢ ${streak} day${streak === 1 ? '' : 's'} streak`;
       }
       if (summaryText) {
-        summaryText.textContent = `Estimated ${metrics.calories} kcal burnt (${metrics.kgLoss.toFixed(2)} kg / ${metrics.lbsLoss.toFixed(2)} lb). Session completion ${metrics.sessionRate}%, with ${remainingMoves} moves left to hit your current goal.`;
+        const sourceText = appleHealth.lastSyncAt ? ' using Apple Watch data where available' : '';
+        summaryText.textContent = `Estimated ${metrics.calories} kcal burnt${sourceText} (${metrics.kgLoss.toFixed(2)} kg / ${metrics.lbsLoss.toFixed(2)} lb). Session completion ${metrics.sessionRate}%, with ${remainingMoves} moves left to hit your current goal.`;
       }
       if (heroTrackStreak) heroTrackStreak.textContent = `${streak} day${streak === 1 ? '' : 's'}`;
       if (heroTrackCalories) heroTrackCalories.textContent = `${metrics.calories} kcal`;
@@ -4445,6 +4633,7 @@ const exerciseImages = {
       nameInput.value = profileState.name;
       handleInput.value = profileState.handle;
       bioInput.value = profileState.bio;
+      updateProfileAppleHealthUI();
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       window.setTimeout(() => {
@@ -4682,6 +4871,9 @@ const exerciseImages = {
       if (button.id === 'regenNutritionBtn') return ['Refresh', 'Meals'];
       if (button.id === 'saveNutritionBtn') return ['Save', 'Plan'];
       if (button.id === 'enableMotionBtn') return ['Motion', 'Hardware'];
+      if (button.id === 'connectAppleHealthBtn') return ['Apple Health', 'Sync'];
+      if (button.id === 'profileAppleHealthBtn') return ['Apple Health', 'Local'];
+      if (button.id === 'importAppleHealthSampleBtn') return ['Sample', 'Watch Data'];
       if (button.id === 'planPrevBtn') return ['Previous', 'Week'];
       if (button.id === 'planNextBtn') return ['Next', 'Week'];
       if (button.id === 'coverMenuBtn') return ['Profile', 'Cover'];
@@ -4756,6 +4948,12 @@ const exerciseImages = {
     }
     const enableMotionBtn = document.getElementById('enableMotionBtn');
     if (enableMotionBtn) enableMotionBtn.addEventListener('click', enableMotionTracking);
+    const connectAppleHealthBtn = document.getElementById('connectAppleHealthBtn');
+    if (connectAppleHealthBtn) connectAppleHealthBtn.addEventListener('click', connectAppleHealth);
+    const profileAppleHealthBtn = document.getElementById('profileAppleHealthBtn');
+    if (profileAppleHealthBtn) profileAppleHealthBtn.addEventListener('click', connectAppleHealth);
+    const importAppleHealthSampleBtn = document.getElementById('importAppleHealthSampleBtn');
+    if (importAppleHealthSampleBtn) importAppleHealthSampleBtn.addEventListener('click', importSampleAppleHealthData);
     const viewNutritionBtn = document.getElementById('viewNutritionBtn');
     if (viewNutritionBtn) {
       viewNutritionBtn.addEventListener('click', () => {
