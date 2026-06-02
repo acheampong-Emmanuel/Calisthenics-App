@@ -678,6 +678,23 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
 - `README.md`
 - `IMPLEMENTATION_PROGRESS.md`
 
+### 2026-06-02 - Checkpoint 19 (Ghana ingredient photo coverage)
+
+#### Completed in this checkpoint
+- Added exact photorealistic image mappings for the Ghana breakfast ingredients shown in the UI:
+  - millet flour
+  - ginger
+  - clove
+  - groundnuts
+  - water
+- Expanded Ghana-region ingredient coverage for additional ingredients such as cassava dough, okra, tilapia, tomato paste, plantain, palm oil, yam, coconut, and local fruits.
+- Kept the image order as exact photo first, keyword photo second, region-aware lookup third, and generated local card only as the final error fallback.
+
+#### Files modified
+- `index.html`
+- `script.js`
+- `IMPLEMENTATION_PROGRESS.md`
+
 ### 2026-06-02 - Checkpoint 15 (PWA, privacy, and load polish)
 
 #### Completed in this checkpoint
