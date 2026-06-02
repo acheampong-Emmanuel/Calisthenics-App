@@ -660,6 +660,24 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
 - `style.css`
 - `IMPLEMENTATION_PROGRESS.md`
 
+### 2026-06-02 - Checkpoint 18 (Curated ingredient photo priority)
+
+#### Completed in this checkpoint
+- Restored curated photorealistic ingredient photos as the first image source.
+- Ingredient image order is now:
+  - exact curated ingredient photo
+  - curated keyword photo
+  - region-aware photo lookup
+  - generated local fallback only when a photo cannot load
+- Added tolerant matching for naming variants such as spaces, hyphens, and singular/plural ingredient labels.
+- Kept region adaptation through the actual ingredient list generated for the selected food culture.
+
+#### Files modified
+- `index.html`
+- `script.js`
+- `README.md`
+- `IMPLEMENTATION_PROGRESS.md`
+
 ### 2026-06-02 - Checkpoint 15 (PWA, privacy, and load polish)
 
 #### Completed in this checkpoint

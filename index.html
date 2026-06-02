@@ -7724,9 +7724,26 @@ const exerciseImages = {
       return `https://loremflickr.com/360/360/${keywords}?lock=${sig}`;
     }
 
+    function getCuratedIngredientPhotoUrl(ingredientName) {
+      const text = normalizeIngredientKey(ingredientName);
+      if (!text) return '';
+      if (INGREDIENT_IMAGE_EXACT[text]) return INGREDIENT_IMAGE_EXACT[text];
+      const singular = text.replace(/s\b/g, '');
+      if (INGREDIENT_IMAGE_EXACT[singular]) return INGREDIENT_IMAGE_EXACT[singular];
+      const compact = text.replace(/[\s-]/g, '');
+      const matched = INGREDIENT_IMAGE_BY_KEYWORD.find(item => {
+        const key = normalizeIngredientKey(item.key);
+        const keyCompact = key.replace(/[\s-]/g, '');
+        return text === key || text.includes(key) || key.includes(text) || compact === keyCompact;
+      });
+      return matched?.image || '';
+    }
+
     function getIngredientImageUrl(ingredientName, meal = null, plan = null) {
       const text = normalizeIngredientKey(ingredientName);
       if (!text) return FALLBACK_INGREDIENT_IMAGE;
+      const curatedPhoto = getCuratedIngredientPhotoUrl(ingredientName);
+      if (curatedPhoto) return curatedPhoto;
       return buildPhotorealisticIngredientUrl(ingredientName, meal, plan);
     }
 
