@@ -601,3 +601,24 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
 - Build a small local iPhone companion with the HealthKit capability enabled.
 - Request user permission for step count, active energy burned, Apple exercise time, heart rate, and workouts.
 - After reading HealthKit samples, call `window.AeroPulseAppleHealth.importHealthSnapshot(...)` inside the web view with the latest metrics.
+
+### 2026-06-02 - Checkpoint 12 (All-iPhone responsive hardening)
+
+#### Completed in this checkpoint
+- Added a final viewport override layer for iPhone layouts using dynamic viewport units with safe-area fallbacks.
+- Hardened app shell, main content, active pages, bottom navigation, modals, and activity overlay against screen-to-screen height differences.
+- Reduced spacing and component padding on shorter iPhone screens so pages stay dense and intentional instead of leaving awkward empty space.
+- Added narrow-width behavior for 320-374 px iPhones:
+  - tracking hero cards stack cleanly
+  - tracking summary and rings collapse into single-column rows
+  - Apple Health metrics use a two-column grid
+- Made profile editor and workout activity overlay scroll internally on compact devices so content remains reachable without clipping.
+- Kept local-only Apple Health privacy copy intact while ensuring the new profile Health button scales on small screens.
+
+#### Files modified
+- `index.html`
+- `style.css`
+- `IMPLEMENTATION_PROGRESS.md`
+
+#### Validation note
+- Static CSS diff validation completed. Browser automation remains blocked by the local runtime issue, so a visual pass should still be done manually in the in-app browser across iPhone viewport sizes.

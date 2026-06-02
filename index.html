@@ -5296,6 +5296,170 @@
         animation: none !important;
       }
     }
+    /* iPhone viewport hardening: keep screens filled, scrollable, and safe-area aware. */
+    :root {
+      --app-screen-h: 100dvh;
+      --app-page-min-h: calc(var(--app-screen-h) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 1.6rem);
+      --app-edge-pad: clamp(0.6rem, 3vw, 1rem);
+      --app-panel-gap: clamp(0.42rem, 1.6vh, 0.72rem);
+      --app-nav-space: calc(5.35rem + env(safe-area-inset-bottom, 0px));
+    }
+    @supports (height: 100svh) {
+      :root {
+        --app-screen-h: 100svh;
+      }
+    }
+    @supports (height: 100dvh) {
+      :root {
+        --app-screen-h: 100dvh;
+      }
+    }
+    html,
+    body,
+    .app-shell {
+      min-height: var(--app-screen-h);
+    }
+    .app-shell {
+      width: min(100vw, 430px);
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1 0 auto;
+      min-height: calc(var(--app-screen-h) - var(--app-nav-space));
+      padding-right: max(var(--app-edge-pad), env(safe-area-inset-right, 0px));
+      padding-bottom: var(--app-nav-space);
+      padding-left: max(var(--app-edge-pad), env(safe-area-inset-left, 0px));
+    }
+    body[data-current-page="cover"] main,
+    body[data-current-page="bmi"] main,
+    body[data-current-page="plan"] main,
+    body[data-current-page="tracking"] main,
+    body[data-current-page="nutrition"] main {
+      padding-top: max(0.58rem, env(safe-area-inset-top, 0px));
+    }
+    .app-page.active {
+      min-height: calc(var(--app-screen-h) - var(--app-nav-space) - env(safe-area-inset-top, 0px));
+    }
+    .cover-page,
+    .reference-dashboard,
+    .plan-dashboard,
+    .tracking-page,
+    .nutrition-page {
+      min-height: max(560px, calc(var(--app-screen-h) - var(--app-nav-space) - env(safe-area-inset-top, 0px)));
+      overflow-x: hidden;
+      overflow-x: clip;
+    }
+    .reference-dashboard,
+    .tracking-page,
+    .nutrition-page {
+      align-content: start;
+      gap: var(--app-panel-gap);
+    }
+    .bottom-nav {
+      width: min(calc(100vw - max(1rem, env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px))), 390px);
+      bottom: max(0.56rem, env(safe-area-inset-bottom, 0px));
+    }
+    .profile-edit-modal,
+    .activity-overlay {
+      min-height: var(--app-screen-h);
+    }
+    .profile-edit-sheet,
+    .activity-screen {
+      max-height: calc(var(--app-screen-h) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 1.4rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    @media (max-width: 430px) {
+      .cover-page,
+      .reference-dashboard,
+      .plan-dashboard,
+      .tracking-page,
+      .nutrition-page {
+        border-radius: clamp(22px, 7vw, 34px);
+      }
+      .tracking-hero-grid,
+      .nutrition-summary-grid {
+        gap: clamp(0.38rem, 1.7vw, 0.55rem);
+      }
+      .tracking-summary,
+      .tracking-rings,
+      .apple-health-grid {
+        gap: clamp(0.34rem, 1.7vw, 0.6rem);
+      }
+      .ring-meter {
+        width: clamp(58px, 18vw, 74px);
+        height: clamp(58px, 18vw, 74px);
+      }
+    }
+    @media (max-width: 374px) {
+      .tracking-hero-grid,
+      .tracking-summary,
+      .tracking-rings,
+      .nutrition-summary-grid {
+        grid-template-columns: 1fr;
+      }
+      .tracking-summary,
+      .tracking-rings {
+        text-align: left;
+      }
+      .ring-card {
+        grid-template-columns: auto minmax(0, 1fr);
+        justify-items: start;
+        text-align: left;
+      }
+      .apple-health-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-height: 740px) {
+      :root {
+        --app-panel-gap: 0.42rem;
+        --app-nav-space: calc(4.9rem + env(safe-area-inset-bottom, 0px));
+      }
+      main {
+        padding-top: max(0.46rem, env(safe-area-inset-top, 0px));
+      }
+      .cover-card {
+        bottom: max(0.62rem, env(safe-area-inset-bottom, 0px));
+        padding: 0.82rem;
+      }
+      .tracking-page,
+      .nutrition-page {
+        gap: 0.46rem;
+      }
+      .tracking-insights,
+      .tracking-exercises,
+      .apple-health-card,
+      .nutrition-glass,
+      .nutrition-overview-block {
+        padding: 0.58rem;
+      }
+      .bottom-nav {
+        padding: 0.42rem;
+      }
+      .nav-item {
+        min-height: 40px;
+      }
+    }
+    @media (max-height: 640px) {
+      .cover-page,
+      .reference-dashboard,
+      .plan-dashboard,
+      .tracking-page,
+      .nutrition-page {
+        min-height: calc(var(--app-screen-h) - var(--app-nav-space) - env(safe-area-inset-top, 0px));
+      }
+      .cover-card .profile-name {
+        font-size: clamp(1.72rem, 7.4vw, 2.25rem);
+      }
+      .cover-card .profile-bio {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
 </style>
 </head>
 <body>
