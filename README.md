@@ -4,6 +4,8 @@ This folder is ready to upload to GitHub and host with GitHub Pages.
 
 ## Package contents
 - `index.html`
+- `manifest.json`
+- `sw.js`
 - `style.css`
 - `script.js`
 - `images/`
@@ -27,7 +29,13 @@ GitHub will publish a URL similar to:
 ## Local preview (optional)
 Open `index.html` directly, or serve the folder with a static server.
 
+## PWA and privacy
+- The app can be installed from GitHub Pages as a local-first PWA.
+- The service worker caches same-origin app files only so the shell can reopen faster and work offline.
+- Apple Watch data must come through a local iPhone HealthKit bridge. Health and motion metrics are stored in the user's browser storage and are not sent to any external service.
+- Edit Profile includes a local clear control for Apple Health and iPhone motion tracking data.
+
 ## Notes
 - Runtime paths use relative links for Pages compatibility.
 - Local app assets are inside `images/`.
-- Some meal/cuisine visuals are loaded from remote sources at runtime, with local fallback assets retained in the export.
+- Ingredient thumbnails are generated locally; meal/cuisine visuals should continue moving toward local-only fallbacks.

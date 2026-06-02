@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="AeroPulse">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="72" x2="440" y2="448" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#58a2ff"/>
+      <stop offset="0.52" stop-color="#3feba4"/>
+      <stop offset="1" stop-color="#a15fff"/>
+    </linearGradient>
+    <linearGradient id="bolt" x1="196" y1="96" x2="330" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d7ecff"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#03060d"/>
+  <rect x="38" y="38" width="436" height="436" rx="96" fill="url(#bg)" opacity="0.96"/>
+  <path d="M286 72 136 284h116l-40 156 164-232H258l28-136Z" fill="url(#bolt)"/>
+  <path d="M126 342c42 30 88 45 138 45 58 0 99-17 144-56" fill="none" stroke="#f8fbff" stroke-width="24" stroke-linecap="round" opacity="0.7"/>
+</svg>

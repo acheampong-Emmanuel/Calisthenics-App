@@ -1,0 +1,19 @@
+{
+  "name": "AeroPulse Calisthenics",
+  "short_name": "AeroPulse",
+  "description": "Local-first calisthenics, nutrition, and Apple Health-ready activity tracking.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#03060d",
+  "theme_color": "#131517",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/aeropulse-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

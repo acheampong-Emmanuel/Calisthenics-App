@@ -3496,11 +3496,42 @@ const exerciseImages = {
       importAppleHealthSnapshot(sample);
     }
 
+    function clearLocalHealthData() {
+      progressState.appleHealth = {
+        connected: false,
+        source: '',
+        lastSyncAt: 0,
+        steps: 0,
+        activeEnergyCalories: 0,
+        workoutMinutes: 0,
+        heartRate: 0,
+        workouts: 0
+      };
+      progressState.hardwareActivityCount = 0;
+      motionState.enabled = false;
+      saveProgress();
+      updateHardwareTrackingUI();
+      updateActivityTracker();
+      const profileStatus = document.getElementById('profileAppleHealthStatus');
+      if (profileStatus) {
+        profileStatus.textContent = 'Local health and motion data cleared from this device.';
+      }
+    }
+
     window.AeroPulseAppleHealth = {
       importHealthSnapshot: importAppleHealthSnapshot,
       requestSync: connectAppleHealth,
+      clearLocalData: clearLocalHealthData,
       getState: () => ({ ...getAppleHealthState() })
     };
+
+    function registerServiceWorker() {
+      if (!('serviceWorker' in navigator)) return;
+      if (!/^https?:$/.test(window.location.protocol)) return;
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
 
     function updateHardwareTrackingUI() {
       const motionStatusText = document.getElementById('motionStatusText');
@@ -4923,6 +4954,7 @@ const exerciseImages = {
       if (button.id === 'enableMotionBtn') return ['Motion', 'Hardware'];
       if (button.id === 'connectAppleHealthBtn') return ['Apple Health', 'Sync'];
       if (button.id === 'profileAppleHealthBtn') return ['Apple Health', 'Local'];
+      if (button.id === 'clearLocalHealthBtn') return ['Clear', 'Local Data'];
       if (button.id === 'importAppleHealthSampleBtn') return ['Sample', 'Watch Data'];
       if (button.id === 'planPrevBtn') return ['Previous', 'Week'];
       if (button.id === 'planNextBtn') return ['Next', 'Week'];
@@ -5002,6 +5034,8 @@ const exerciseImages = {
     if (connectAppleHealthBtn) connectAppleHealthBtn.addEventListener('click', connectAppleHealth);
     const profileAppleHealthBtn = document.getElementById('profileAppleHealthBtn');
     if (profileAppleHealthBtn) profileAppleHealthBtn.addEventListener('click', connectAppleHealth);
+    const clearLocalHealthBtn = document.getElementById('clearLocalHealthBtn');
+    if (clearLocalHealthBtn) clearLocalHealthBtn.addEventListener('click', clearLocalHealthData);
     const importAppleHealthSampleBtn = document.getElementById('importAppleHealthSampleBtn');
     if (importAppleHealthSampleBtn) importAppleHealthSampleBtn.addEventListener('click', importSampleAppleHealthData);
     const viewNutritionBtn = document.getElementById('viewNutritionBtn');
@@ -5382,5 +5416,6 @@ const exerciseImages = {
       syncGuidedSetupFlow();
       scheduleDailyCoverQuoteUpdate();
       initCodexAutoRefresh();
+      registerServiceWorker();
     });
   

@@ -9,6 +9,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Calisthenics">
   <meta name="theme-color" content="#131517">
+  <meta name="description" content="AeroPulse is a local-first calisthenics, nutrition, and activity tracking app.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="images/aeropulse-icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="images/aeropulse-icon.svg">
   <style>
     :root {
       color-scheme: dark;
@@ -64,6 +68,9 @@
       transition:
         background var(--theme-transition) ease,
         color var(--theme-transition) ease;
+    }
+    img {
+      max-width: 100%;
     }
     body::before {
       content: "";
@@ -4174,8 +4181,23 @@
     .profile-health-btn:active {
       transform: scale(0.985);
     }
+    .profile-health-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+    .profile-health-btn.secondary {
+      border-color: rgba(255, 255, 255, 0.18);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.16), rgba(var(--ui-vibrant-a-rgb), 0.18)),
+        rgba(17, 33, 54, 0.54);
+      color: rgba(246, 251, 255, 0.92);
+    }
     @media (max-width: 360px) {
       .profile-health-connect {
+        grid-template-columns: 1fr;
+      }
+      .profile-health-actions {
         grid-template-columns: 1fr;
       }
       .profile-health-btn {
@@ -5491,7 +5513,7 @@
     <section id="coverPage" class="app-page active" data-page="cover">
       <section class="cover-page" aria-label="Cover">
         <div class="page-brand"><svg class="brand-logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 1.7 4.8 13.1h5.5L8.9 22.3l10.3-12.6h-5.8z"/></svg><span class="brand-text">AeroPulse</span></div>
-        <img id="coverImage" class="cover-image" alt="Cover image" src="9e231f3ade7a41a7d02b0c10b93a62b3.jpg">
+        <img id="coverImage" class="cover-image" alt="Cover image" src="9e231f3ade7a41a7d02b0c10b93a62b3.jpg" decoding="async" fetchpriority="high">
         <div class="cover-top">
           <div id="coverMenu" class="cover-menu">
             <button id="coverMenuBtn" class="icon-button" type="button" aria-label="Cover menu" aria-haspopup="true" aria-expanded="false">&#8942;</button>
@@ -5582,15 +5604,15 @@
                 </button>
                 <div id="bodyTypeMenuDropdown" class="gender-menu-dropdown" role="menu" aria-label="Select body type">
                   <button class="gender-option bodytype-option" type="button" data-bodytype-option="ectomorph" role="menuitemradio" aria-checked="false">
-                    <img id="bodyTypeOptionEctomorphPhoto" class="gender-option-photo" src="image-2.png" alt="Ectomorph body type graphic" loading="lazy">
+                    <img id="bodyTypeOptionEctomorphPhoto" class="gender-option-photo" src="image-2.png" alt="Ectomorph body type graphic" loading="lazy" decoding="async">
                     <span class="bodytype-option-copy"><strong>Ectomorph</strong><em>Lean frame</em></span>
                   </button>
                   <button class="gender-option bodytype-option" type="button" data-bodytype-option="mesomorph" role="menuitemradio" aria-checked="true">
-                    <img id="bodyTypeOptionMesomorphPhoto" class="gender-option-photo" src="image-2.png" alt="Mesomorph body type graphic" loading="lazy">
+                    <img id="bodyTypeOptionMesomorphPhoto" class="gender-option-photo" src="image-2.png" alt="Mesomorph body type graphic" loading="lazy" decoding="async">
                     <span class="bodytype-option-copy"><strong>Mesomorph</strong><em>Athletic build</em></span>
                   </button>
                   <button class="gender-option bodytype-option" type="button" data-bodytype-option="endomorph" role="menuitemradio" aria-checked="false">
-                    <img id="bodyTypeOptionEndomorphPhoto" class="gender-option-photo" src="image-2.png" alt="Endomorph body type graphic" loading="lazy">
+                    <img id="bodyTypeOptionEndomorphPhoto" class="gender-option-photo" src="image-2.png" alt="Endomorph body type graphic" loading="lazy" decoding="async">
                     <span class="bodytype-option-copy"><strong>Endomorph</strong><em>Higher energy storage</em></span>
                   </button>
                 </div>
@@ -5609,11 +5631,11 @@
                 </button>
                 <div id="genderMenuDropdown" class="gender-menu-dropdown" role="menu" aria-label="Select gender">
                   <button class="gender-option" type="button" data-gender-option="male" role="menuitemradio" aria-checked="true">
-                    <img id="genderOptionMalePhoto" class="gender-option-photo" src="image-2.png" alt="Male body graphic" loading="lazy">
+                    <img id="genderOptionMalePhoto" class="gender-option-photo" src="image-2.png" alt="Male body graphic" loading="lazy" decoding="async">
                     <span>Male</span>
                   </button>
                   <button class="gender-option" type="button" data-gender-option="female" role="menuitemradio" aria-checked="false">
-                    <img id="genderOptionFemalePhoto" class="gender-option-photo" src="image-2.png" alt="Female body graphic" loading="lazy">
+                    <img id="genderOptionFemalePhoto" class="gender-option-photo" src="image-2.png" alt="Female body graphic" loading="lazy" decoding="async">
                     <span>Female</span>
                   </button>
                 </div>
@@ -5623,17 +5645,17 @@
               <p class="bodytype-title">Body type guide</p>
               <div id="bodyTypeGraphic" class="bodytype-visual" role="group" aria-label="Body type visual guide">
                 <button class="bodytype-chip" type="button" data-body-type="ectomorph">
-                  <img class="bodytype-photo" src="image-2.png" alt="Ectomorph body type reference photo" loading="lazy">
+                  <img class="bodytype-photo" src="image-2.png" alt="Ectomorph body type reference photo" loading="lazy" decoding="async">
                   <strong>Ectomorph</strong>
                   <em>Lean frame</em>
                 </button>
                 <button class="bodytype-chip" type="button" data-body-type="mesomorph">
-                  <img class="bodytype-photo" src="image-2.png" alt="Mesomorph body type reference photo" loading="lazy">
+                  <img class="bodytype-photo" src="image-2.png" alt="Mesomorph body type reference photo" loading="lazy" decoding="async">
                   <strong>Mesomorph</strong>
                   <em>Athletic build</em>
                 </button>
                 <button class="bodytype-chip" type="button" data-body-type="endomorph">
-                  <img class="bodytype-photo" src="image-2.png" alt="Endomorph body type reference photo" loading="lazy">
+                  <img class="bodytype-photo" src="image-2.png" alt="Endomorph body type reference photo" loading="lazy" decoding="async">
                   <strong>Endomorph</strong>
                   <em>Higher energy storage</em>
                 </button>
@@ -6080,7 +6102,10 @@
           <strong>Local Health tracking</strong>
           <p id="profileAppleHealthStatus">Private by design. Health metrics stay on this device.</p>
         </div>
-        <button id="profileAppleHealthBtn" class="profile-health-btn" type="button">Turn On</button>
+        <div class="profile-health-actions">
+          <button id="profileAppleHealthBtn" class="profile-health-btn" type="button">Turn On</button>
+          <button id="clearLocalHealthBtn" class="profile-health-btn secondary" type="button">Clear</button>
+        </div>
       </div>
       <div class="profile-edit-actions">
         <button id="cancelProfileEditBtn" class="profile-edit-cancel" type="button">Cancel</button>
@@ -10140,11 +10165,42 @@ const exerciseImages = {
       importAppleHealthSnapshot(sample);
     }
 
+    function clearLocalHealthData() {
+      progressState.appleHealth = {
+        connected: false,
+        source: '',
+        lastSyncAt: 0,
+        steps: 0,
+        activeEnergyCalories: 0,
+        workoutMinutes: 0,
+        heartRate: 0,
+        workouts: 0
+      };
+      progressState.hardwareActivityCount = 0;
+      motionState.enabled = false;
+      saveProgress();
+      updateHardwareTrackingUI();
+      updateActivityTracker();
+      const profileStatus = document.getElementById('profileAppleHealthStatus');
+      if (profileStatus) {
+        profileStatus.textContent = 'Local health and motion data cleared from this device.';
+      }
+    }
+
     window.AeroPulseAppleHealth = {
       importHealthSnapshot: importAppleHealthSnapshot,
       requestSync: connectAppleHealth,
+      clearLocalData: clearLocalHealthData,
       getState: () => ({ ...getAppleHealthState() })
     };
+
+    function registerServiceWorker() {
+      if (!('serviceWorker' in navigator)) return;
+      if (!/^https?:$/.test(window.location.protocol)) return;
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
 
     function updateHardwareTrackingUI() {
       const motionStatusText = document.getElementById('motionStatusText');
@@ -11595,6 +11651,7 @@ const exerciseImages = {
       if (button.id === 'enableMotionBtn') return ['Motion', 'Hardware'];
       if (button.id === 'connectAppleHealthBtn') return ['Apple Health', 'Sync'];
       if (button.id === 'profileAppleHealthBtn') return ['Apple Health', 'Local'];
+      if (button.id === 'clearLocalHealthBtn') return ['Clear', 'Local Data'];
       if (button.id === 'importAppleHealthSampleBtn') return ['Sample', 'Watch Data'];
       if (button.id === 'planPrevBtn') return ['Previous', 'Week'];
       if (button.id === 'planNextBtn') return ['Next', 'Week'];
@@ -11652,6 +11709,8 @@ const exerciseImages = {
     if (connectAppleHealthBtn) connectAppleHealthBtn.addEventListener('click', connectAppleHealth);
     const profileAppleHealthBtn = document.getElementById('profileAppleHealthBtn');
     if (profileAppleHealthBtn) profileAppleHealthBtn.addEventListener('click', connectAppleHealth);
+    const clearLocalHealthBtn = document.getElementById('clearLocalHealthBtn');
+    if (clearLocalHealthBtn) clearLocalHealthBtn.addEventListener('click', clearLocalHealthData);
     const importAppleHealthSampleBtn = document.getElementById('importAppleHealthSampleBtn');
     if (importAppleHealthSampleBtn) importAppleHealthSampleBtn.addEventListener('click', importSampleAppleHealthData);
     const viewNutritionBtn = document.getElementById('viewNutritionBtn');
@@ -12037,6 +12096,7 @@ const exerciseImages = {
       syncGuidedSetupFlow();
       scheduleDailyCoverQuoteUpdate();
       initCodexAutoRefresh();
+      registerServiceWorker();
     });
   </script>
 </body>

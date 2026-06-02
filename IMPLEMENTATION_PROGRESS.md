@@ -659,3 +659,30 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
 - `script.js`
 - `style.css`
 - `IMPLEMENTATION_PROGRESS.md`
+
+### 2026-06-02 - Checkpoint 15 (PWA, privacy, and load polish)
+
+#### Completed in this checkpoint
+- Added install-ready PWA metadata:
+  - `manifest.json`
+  - `images/aeropulse-icon.svg`
+  - manifest and icon links in `index.html`
+- Added `sw.js` with a same-origin app shell cache for faster reloads and offline reopening on GitHub Pages or another HTTP/HTTPS static host.
+- Registered the service worker only on HTTP/HTTPS so the current local `file://` preview keeps working without console noise.
+- Added a local Health data clear action in Edit Profile:
+  - resets stored Apple Health metrics
+  - resets local iPhone motion pulse count
+  - keeps profile, workouts, and nutrition plans intact
+- Exposed the clear action through `window.AeroPulseAppleHealth.clearLocalData()` for an iOS wrapper or manual diagnostics.
+- Added async decoding/fetch priority hints for large profile images used during setup and cover rendering.
+- Documented the local-only HealthKit/privacy rule in `README.md`.
+
+#### Files modified
+- `index.html`
+- `script.js`
+- `style.css`
+- `manifest.json`
+- `sw.js`
+- `images/aeropulse-icon.svg`
+- `README.md`
+- `IMPLEMENTATION_PROGRESS.md`
