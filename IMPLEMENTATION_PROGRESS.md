@@ -639,3 +639,23 @@ Legend: `Complete` / `In progress` / `Not started` / `Blocked`
 - `index.html`
 - `script.js`
 - `IMPLEMENTATION_PROGRESS.md`
+
+### 2026-06-02 - Checkpoint 14 (Reliable local ingredient images)
+
+#### Completed in this checkpoint
+- Replaced remote-first ingredient thumbnails with guaranteed local generated SVG thumbnails.
+- Added deterministic ingredient thumbnail rendering with:
+  - food-specific emoji/icon
+  - stable accent colors
+  - short readable ingredient label
+  - cuisine/context subtitle
+- Cached generated ingredient SVG data URIs so repeated ingredients reuse the same image.
+- Kept `onerror` fallback handlers, but the primary image is now local and offline-safe.
+- Added lazy loading/async decoding and loaded-state classes for ingredient thumbnails and popover images.
+- Added CSS handling for inline SVG ingredient images so they render centered and crisp in small cards.
+
+#### Files modified
+- `index.html`
+- `script.js`
+- `style.css`
+- `IMPLEMENTATION_PROGRESS.md`

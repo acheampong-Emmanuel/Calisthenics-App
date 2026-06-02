@@ -1421,10 +1421,70 @@ const exerciseImages = {
       { key: 'flaxseed', image: 'https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=600&q=80' }
     ];
 
-    const FALLBACK_INGREDIENT_IMAGE = createFoodIllustrationDataUri('Food ingredient', {
-      subtitle: 'Ingredient placeholder',
-      emoji: 'ðŸ¥—'
-    });
+    const INGREDIENT_IMAGE_RENDER_CACHE = new Map();
+
+    function escapeSvgText(value = '') {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+    }
+
+    function ingredientAccentFor(label = '') {
+      const normalized = normalizeIngredientKey(label);
+      let hash = 0;
+      for (let index = 0; index < normalized.length; index += 1) {
+        hash = ((hash << 5) - hash) + normalized.charCodeAt(index);
+        hash |= 0;
+      }
+      const palettes = [
+        { a: '80, 174, 255', b: '96, 225, 178' },
+        { a: '255, 148, 105', b: '255, 215, 112' },
+        { a: '175, 143, 255', b: '110, 214, 255' },
+        { a: '255, 116, 164', b: '255, 190, 118' },
+        { a: '112, 220, 152', b: '92, 187, 255' }
+      ];
+      return palettes[Math.abs(hash) % palettes.length];
+    }
+
+    function createIngredientThumbnailDataUri(ingredientName, meal = null, plan = null) {
+      const label = String(ingredientName || 'Ingredient').trim() || 'Ingredient';
+      const cacheKey = `${normalizeIngredientKey(label)}::${meal?.cuisineCountry || plan?.countryPreference || 'mixed'}`;
+      if (INGREDIENT_IMAGE_RENDER_CACHE.has(cacheKey)) return INGREDIENT_IMAGE_RENDER_CACHE.get(cacheKey);
+      const cuisine = getCountryLabel(meal?.cuisineCountry || plan?.countryPreference || NO_COUNTRY_PREFERENCE);
+      const words = label.split(/\s+/).filter(Boolean);
+      const title = escapeSvgText(words.slice(0, 2).join(' '));
+      const subtitle = escapeSvgText(cuisine);
+      const emoji = escapeSvgText(foodEmojiFor(label));
+      const accents = ingredientAccentFor(label);
+      const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(${accents.a},0.92)"/>
+      <stop offset="100%" stop-color="rgba(${accents.b},0.82)"/>
+    </linearGradient>
+    <radialGradient id="plate" cx="50%" cy="46%" r="55%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.34)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.06)"/>
+    </radialGradient>
+  </defs>
+  <rect width="180" height="180" rx="24" fill="#0d1a2d"/>
+  <rect x="5" y="5" width="170" height="170" rx="22" fill="url(#g)" opacity="0.92"/>
+  <circle cx="90" cy="74" r="48" fill="url(#plate)" stroke="rgba(255,255,255,0.28)" stroke-width="2"/>
+  <text x="90" y="91" text-anchor="middle" dominant-baseline="middle" font-size="54" font-family="Apple Color Emoji, Segoe UI Emoji, Arial, sans-serif">${emoji}</text>
+  <rect x="15" y="124" width="150" height="40" rx="14" fill="rgba(8,18,33,0.34)" stroke="rgba(255,255,255,0.16)"/>
+  <text x="90" y="141" text-anchor="middle" fill="#f7fbff" font-size="15" font-weight="850" font-family="Inter, Arial, sans-serif">${title}</text>
+  <text x="90" y="156" text-anchor="middle" fill="rgba(238,247,255,0.82)" font-size="9" font-weight="700" font-family="Inter, Arial, sans-serif">${subtitle}</text>
+</svg>`.trim();
+      const uri = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+      INGREDIENT_IMAGE_RENDER_CACHE.set(cacheKey, uri);
+      return uri;
+    }
+
+    const FALLBACK_INGREDIENT_IMAGE = createIngredientThumbnailDataUri('Food ingredient');
 
     function normalizeIngredientKey(value = '') {
       return String(value || '')
@@ -1436,24 +1496,13 @@ const exerciseImages = {
     }
 
     function getIngredientFallbackImage(ingredientName, meal = null, plan = null) {
-      const item = String(ingredientName || 'ingredient').trim();
-      const cuisine = getCountryLabel(meal?.cuisineCountry || plan?.countryPreference || NO_COUNTRY_PREFERENCE);
-      return createFoodIllustrationDataUri(item, {
-        subtitle: `${cuisine} ingredient placeholder`,
-        emoji: foodEmojiFor(item)
-      });
+      return createIngredientThumbnailDataUri(ingredientName, meal, plan);
     }
 
     function getIngredientImageUrl(ingredientName, meal = null, plan = null) {
       const text = normalizeIngredientKey(ingredientName);
       if (!text) return FALLBACK_INGREDIENT_IMAGE;
-
-      const exact = INGREDIENT_IMAGE_EXACT[text];
-      if (exact) return exact;
-
-      const match = INGREDIENT_IMAGE_BY_KEYWORD.find(item => text.includes(item.key));
-      if (match?.image) return match.image;
-
+      // Use local generated thumbnails first so ingredient images work offline and cannot break on remote failures.
       return getIngredientFallbackImage(ingredientName, meal, plan);
     }
 
@@ -1601,11 +1650,11 @@ const exerciseImages = {
           const safeBenefit = escapeHtml(insight.benefit);
           return `
             <li class="ingredient-chip" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-pop-side="${popSide}">
-              <img class="ingredient-photo" src="${imageUrl}" alt="${safeName}" onerror="this.onerror=null;this.src='${imageFallback}';">
+              <img class="ingredient-photo" src="${imageUrl}" alt="${safeName}" loading="lazy" decoding="async" onload="this.classList.add('loaded');" onerror="this.onerror=null;this.src='${imageFallback}';this.classList.add('loaded');">
               <span class="ingredient-name">${safeName}</span>
               <div class="ingredient-popover" role="dialog" aria-label="${safeName} nutrition detail">
                 <div class="ingredient-pop-header">
-                  <img class="ingredient-pop-photo" src="${imageUrl}" alt="${safeName}" onerror="this.onerror=null;this.src='${imageFallback}';">
+                  <img class="ingredient-pop-photo" src="${imageUrl}" alt="${safeName}" loading="lazy" decoding="async" onload="this.classList.add('loaded');" onerror="this.onerror=null;this.src='${imageFallback}';this.classList.add('loaded');">
                   <div>
                     <p class="ingredient-pop-title">${safeName}</p>
                     <p class="ingredient-pop-summary">${safeSummary}</p>
